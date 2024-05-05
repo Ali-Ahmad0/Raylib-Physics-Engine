@@ -106,11 +106,13 @@ public class CollisionTest : World2D
         Vector2 scaleCir = new Vector2(sCir, sCir);
 
         // Create bodies (testing)
-        if (Mouse.IsRMBPressed() || Gamepad.IsButtonPressed("r1")) {
+        if (Mouse.IsRMBDown() || Gamepad.IsButtonPressed("r1")) {
             
             // Create circle rigid body
             CreateRigidBody(Mouse.GetPos(), scaleCir, 1f, 0.5f, 32f, out RigidBody2D rigidBody);
             bodies.Add(rigidBody);
+
+            Console.WriteLine(bodies.Count);
         }
 
         else if (Mouse.IsLMBPressed() || Gamepad.IsButtonPressed("l1")) {
