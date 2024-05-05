@@ -89,7 +89,8 @@ public class CollisionTest : World2D
         Raylib.DrawText("Collision Test", 20, 20, 32, Color.Green);
 
         // Ensure bodies are created (call once or in Ready)
-        if (bodies.Count == 0) { 
+        if (bodies.Count == 0) 
+        { 
             CreateStaticBody(new Vector2(640, 900), 0f, Vector2.One, 0.5f, 1200f, 100f, out StaticBody2D staticBody);
             bodies.Add(staticBody);
 
@@ -106,16 +107,17 @@ public class CollisionTest : World2D
         Vector2 scaleCir = new Vector2(sCir, sCir);
 
         // Create bodies (testing)
-        if (Mouse.IsRMBDown() || Gamepad.IsButtonPressed("r1")) {
+        if (Mouse.IsRMBPressed() || Gamepad.IsButtonPressed("r1")) 
+        {
             
             // Create circle rigid body
             CreateRigidBody(Mouse.GetPos(), scaleCir, 1f, 0.5f, 32f, out RigidBody2D rigidBody);
             bodies.Add(rigidBody);
 
-            Console.WriteLine(bodies.Count);
         }
 
-        else if (Mouse.IsLMBPressed() || Gamepad.IsButtonPressed("l1")) {
+        else if (Mouse.IsLMBPressed() || Gamepad.IsButtonPressed("l1")) 
+        {
 
             // Create box rigid body
             CreateRigidBody(Raylib.GetMousePosition(), 0f, scaleBox, 1f, 0.5f, 64f, 64f, out RigidBody2D rigidBody);
@@ -124,7 +126,8 @@ public class CollisionTest : World2D
         } 
 
         // Update and draw each body
-        for (int i = 0; i < bodies.Count; i++) {
+        for (int i = 0; i < bodies.Count; i++) 
+        {
             DrawCollisionShapes(bodies[i], colors[i % 5]);
         }
 
