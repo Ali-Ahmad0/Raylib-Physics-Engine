@@ -60,18 +60,6 @@ internal class WorldPhysics
 
     struct State { public List<PhysicsBody2D> bodies; public (int, int) pair; public State(List<PhysicsBody2D> bodies, (int, int) pair) { this.bodies = bodies; this.pair = pair; } }
 
-    // Check if 2 bodies are colliding
-    private static void CollisionNarrowPhase(List<PhysicsBody2D> bodies)
-    {
-        foreach ((int, int) pair in contactPairs)
-        {
-            if (Properties.EnableMT)
-                ThreadPool.QueueUserWorkItem((state) => { ResolvePair(((State)state).bodies, ((State)state).pair); }, (new State(bodies, pair)));
-            else
-                ResolvePair(bodies, pair);
-        }
-    }
-
     // Decide what do to after collision
     private static void ResolvePair(List<PhysicsBody2D> bodies, (int, int) pair)
     {
@@ -85,19 +73,40 @@ internal class WorldPhysics
         {
             CollisionHelper.FindContactPoints(bodyA, bodyB, out Vector2 contactP1, out Vector2 contactP2, out int contactCount);
             CollisionManifold contact = new CollisionManifold(bodyA, bodyB, normal, depth, contactP1, contactP2, contactCount);
-            
             if (bodyA is PlayerBody2D || bodyB is PlayerBody2D)
-                        CollisionResolution.ResolveCollisionBasic(bodyA, bodyB, normal, depth);
-          
-            CollisionResolution.ResolveCollisionAdvanced(in contact);
+               CollisionResolution.ResolveCollisionBasic(bodyA, bodyB, normal, depth);
             lock (lockOject)
             {
-                SeparateBodies(bodyA, bodyB, normal * depth);
+                CollisionResolution.ResolveCollisionAdvanced(in contact);
             }
+            SeparateBodies(bodyA, bodyB, normal * depth);
             UpdateCollisionState(bodyA, bodyB, normal);
         }
     }
 
+    // Check if 2 bodies are colliding
+    private static void CollisionNarrowPhase(List<PhysicsBody2D> bodies)
+    {
+        List<Task> tasks = new List<Task>();
+        // Sometimes a projectile body might be destroyed in the middle of the loop, so we need to handle the exception
+        try
+        {
+            foreach ((int, int) pair in contactPairs)
+            {
+                if (Properties.EnableMT)
+                    tasks.Add(Task.Factory.StartNew((Object state) => { ResolvePair(((State)state).bodies, ((State)state).pair); }, (Object)(new State(bodies, pair))));
+                    //ThreadPool.QueueUserWorkItem(, (Object)(new State(bodies, pair)));
+                else
+                    ResolvePair(bodies, pair);
+            }
+            Task.WaitAll(tasks.ToArray());
+            tasks.Clear();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
+    }
     // Seperate colliding bodies
     private static void SeparateBodies(PhysicsBody2D bodyA, PhysicsBody2D bodyB, Vector2 direction)
     {

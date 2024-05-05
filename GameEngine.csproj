@@ -19,6 +19,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Raylib-cs" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="Raylib-cs">
       <HintPath>D:\Programs\Programming\Libraries\C#\Raylib-cs-master\Raylib-cs\bin\Debug\net6.0\Raylib-cs.dll</HintPath>
     </Reference>
