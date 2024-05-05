@@ -13,6 +13,8 @@ public class ProjectileTest : World2D
     private List<Color> colors;
     private Vector2 spawnPosition;
 
+    private Camera2D camera;
+
     internal ProjectileTest()
     {
         colors = new List<Color>() {
@@ -29,13 +31,20 @@ public class ProjectileTest : World2D
         Gamepad.AssignButton("x", GamepadButton.RightFaceDown);
 
         Raylib.HideCursor();
+
+        // Create a camera centered at the middle of the screen
+        camera = new Camera2D(Vector2.Zero, Vector2.Zero, 0, 1f);
     }
 
     public override void Update(double delta)
     {
+        Raylib.BeginMode2D(camera);
 
         Draw();
-        HandlePhysics(bodies, delta);
+
+        Raylib.EndMode2D();
+
+        HandlePhysics(bodies, delta, camera);
     }
 
     private void Draw()

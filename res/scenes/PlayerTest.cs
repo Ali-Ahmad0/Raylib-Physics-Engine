@@ -12,6 +12,8 @@ internal class PlayerTest : World2D
     private List<PhysicsBody2D> bodies;
     private List<Color> colors;
 
+    private Camera2D camera;
+
     internal PlayerTest()
     {
         bodies = new List<PhysicsBody2D>();
@@ -60,19 +62,27 @@ internal class PlayerTest : World2D
         };
 
         TileMap.GenerateTileMap(ref tileMapProps, bodies);
-
         Raylib.ShowCursor();
+
+        // Create a camera centered at the middle of the screen
+        camera = new Camera2D(Vector2.Zero, Vector2.Zero, 0, 1f);
 
     }
 
     public override void Update(double delta)
-    {            
-        Draw();
-        HandlePhysics(bodies, delta);
+    {
+        // Begin 2D mode with the camera
+        Raylib.BeginMode2D(camera);
 
         PlayerBody2D player = (PlayerBody2D)bodies[0];
         player.DrawPlayer();
         player.UseDefaultMotion(delta);
+
+        Draw();
+        Raylib.EndMode2D();
+
+        HandlePhysics(bodies, delta, camera);
+
     }
 
     private void Draw()

@@ -2,6 +2,7 @@
 using GameEngine.src.tilemap;
 using GameEngine.src.world;
 using Raylib_cs;
+using System.Numerics;
 
 namespace GameEngine.res.scenes;
 
@@ -10,6 +11,8 @@ public class TilemapTest : World2D
     private TileMapProps tileMapProps;
     private List<PhysicsBody2D> bodies;
     private List<Color> colors;
+
+    private Camera2D camera;
 
     internal TilemapTest()
     {
@@ -69,12 +72,19 @@ public class TilemapTest : World2D
 
         TileMap.GenerateTileMap(ref tileMapProps, bodies);
         Raylib.ShowCursor();
+
+        // Create a camera centered at the middle of the screen
+        camera = new Camera2D(Vector2.Zero, Vector2.Zero, 0, 1f);
     }
 
     public override void Update(double delta)
     {
+        Raylib.BeginMode2D(camera);
+
         Raylib.DrawText("Tilemap Test", 20, 20, 32, Color.Green);
         Draw();
+
+        Raylib.EndMode2D();
     }
 
     private void Draw()

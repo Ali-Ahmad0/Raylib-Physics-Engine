@@ -13,6 +13,8 @@ public class CollisionTest : World2D
     private List<PhysicsBody2D> bodies;
     private List<Color> colors;
 
+    private Camera2D camera;
+
 
     // Constructor for initialization
     internal CollisionTest()
@@ -31,21 +33,19 @@ public class CollisionTest : World2D
         Gamepad.AssignButton("r1", GamepadButton.RightTrigger1);
 
         Raylib.HideCursor();
+
+        // Create floor
+        CreateStaticBody(new Vector2(640, 900), 0f, Vector2.One, 0.5f, 1200f, 100f, out StaticBody2D staticBody);
+        bodies.Add(staticBody);
+
+        // Create a camera centered at the middle of the screen
+        camera = new Camera2D(Vector2.Zero, Vector2.Zero, 0, 1f);
     }
 
     public override void Update(double delta)
     {
-        //// Create a camera centered at the middle of the screen
-        //Camera2D camera = new Camera2D(Vector2.Zero, Vector2.Zero, 0, 1f);
-
-        //if (bodies.Count > 1)
-        //{
-        //    camera.Target = bodies[1].Transform.Translation;
-        //    camera.Offset = new Vector2(640, 480);
-        //}
-
         // Begin 2D mode with the camera
-        //Raylib.BeginMode2D(camera);
+        Raylib.BeginMode2D(camera);
 
         float keyboardRotation = Input.GetDirection("left", "right") / 5;
         float gamepadRotation = 0f;
@@ -59,16 +59,16 @@ public class CollisionTest : World2D
         // Use gamepad rotation only if keyboard rotation is not providing input
         float rotation = keyboardRotation != 0f ? keyboardRotation : gamepadRotation;
 
+        bodies[0].Rotate(rotation);
+
         // Draw
         Draw();
 
-        bodies[0].Rotate(rotation);
-
         // End 2D mode
-        //Raylib.EndMode2D();
+        Raylib.EndMode2D();
 
         // Handle physics outside the 2D mode
-        HandlePhysics(bodies, delta);
+        HandlePhysics(bodies, delta, camera);
     }
 
     // Draw
@@ -87,14 +87,6 @@ public class CollisionTest : World2D
 
         // Scene title
         Raylib.DrawText("Collision Test", 20, 20, 32, Color.Green);
-
-        // Ensure bodies are created (call once or in Ready)
-        if (bodies.Count == 0) 
-        { 
-            CreateStaticBody(new Vector2(640, 900), 0f, Vector2.One, 0.5f, 1200f, 100f, out StaticBody2D staticBody);
-            bodies.Add(staticBody);
-
-        }
 
         // Random
         Random random = new Random();

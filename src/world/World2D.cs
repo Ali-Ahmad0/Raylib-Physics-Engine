@@ -1,6 +1,7 @@
 ﻿using Raylib_cs;
 using System.Numerics;
 using GameEngine.src.physics.body;
+using GameEngine.src.helper;
 
 namespace GameEngine.src.world;
 public abstract class World2D
@@ -24,7 +25,7 @@ public abstract class World2D
     protected static void CreatePlayerBody(Vector2 position, float rotation, float density,
         float width, float height, out PlayerBody2D body2D) => WorldCreation.CreatePlayerBody(position, rotation, density, width, height, out body2D);
 
-    protected static void HandlePhysics(List<PhysicsBody2D> bodies, double delta) => WorldPhysics.HandlePhysics(bodies, delta);
+    protected static void HandlePhysics(List<PhysicsBody2D> bodies, double delta, Camera2D camera) => WorldPhysics.HandlePhysics(bodies, delta, camera);
 
     public abstract void Update(double delta);
 

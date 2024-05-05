@@ -1,4 +1,5 @@
-﻿using GameEngine.src.physics.body;
+﻿using GameEngine.src.helper;
+using GameEngine.src.physics.body;
 using System.Numerics;
 
 namespace GameEngine.src.physics.collision;
@@ -236,5 +237,12 @@ internal static class CollisionHelper
         }
     }
 
-
+    // Helper method to check if AABB intersects with camera bounds
+    internal static bool AABBExceedsBounds(AxisAlignedBoundingBox aabb, CameraBounds bounds)
+    {
+        return aabb.Max.X < bounds.Min.X ||
+               aabb.Max.Y < bounds.Min.Y ||
+               aabb.Min.X > bounds.Max.X ||
+               aabb.Min.Y > bounds.Max.Y;
+    }
 }
