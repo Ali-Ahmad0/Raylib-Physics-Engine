@@ -7,6 +7,20 @@ using GameEngine.src.helper;
 
 namespace GameEngine.src.world;
 
+struct State
+{
+    public List<PhysicsBody2D> bodies;
+    public (int, int) pair;
+    public CameraBounds bounds;
+    public State(List<PhysicsBody2D> bodies, (int, int) pair, CameraBounds bounds)
+
+    {
+        this.bodies = bodies;
+        this.pair = pair;
+        this.bounds = bounds;
+    }
+}
+
 internal class WorldPhysics
 {
     private static object lockOject = new object();
@@ -41,6 +55,7 @@ internal class WorldPhysics
     // Check if 2 bodies may or may not be colliding
     private static void CollisionBroadPhase(List<PhysicsBody2D> bodies, CameraBounds bounds)
     {
+
         for (int i = 0; i < bodies.Count; i++)
         {
             PhysicsBody2D bodyA = bodies[i];
@@ -69,18 +84,27 @@ internal class WorldPhysics
         }
     }
 
-    struct State
-    {
-        public List<PhysicsBody2D> bodies;
-        public (int, int) pair;
-        public CameraBounds bounds;
-        public State(List<PhysicsBody2D> bodies, (int, int) pair, CameraBounds bounds)
 
+    // Check if 2 bodies are colliding
+    private static void CollisionNarrowPhase(List<PhysicsBody2D> bodies, CameraBounds bounds)
+    {
+        List<Task> tasks = new List<Task>();
+        // Sometimes a projectile body might be destroyed in the middle of the loop, so we need to handle the exception
+      
+        foreach ((int, int) pair in contactPairs)
         {
-            this.bodies = bodies;
-            this.pair = pair;
-            this.bounds = bounds;
+            if (Properties.EnableMT)
+                tasks.Add(Task.Factory.StartNew((object state) =>
+                { ResolvePair(((State)state).bodies, ((State)state).pair, ((State)state).bounds); }, (Object)(new State(bodies, pair, bounds))));
+                
+            //ThreadPool.QueueUserWorkItem(, (Object)(new State(bodies, pair)));
+            else    
+                ResolvePair(bodies, pair, bounds); 
         }
+
+        Task.WaitAll(tasks.ToArray());    
+        tasks.Clear();
+
     }
 
     // Decide what do to after collision
@@ -92,13 +116,6 @@ internal class WorldPhysics
         Vector2 normal;
         float depth;
 
-        // Check if either body exceeds the camera bounds
-        if (CollisionHelper.AABBExceedsBounds(bodyA.GetAABB(), bounds) ||
-            CollisionHelper.AABBExceedsBounds(bodyB.GetAABB(), bounds))
-        {
-            return;
-        }
-
         if (CollisionDetection.CheckCollision(bodyA, bodyB, out normal, out depth))
         {
             CollisionHelper.FindContactPoints(bodyA, bodyB, out Vector2 contactP1, out Vector2 contactP2, out int contactCount);
@@ -107,9 +124,13 @@ internal class WorldPhysics
             if (bodyA is PlayerBody2D || bodyB is PlayerBody2D)
                 CollisionResolution.ResolveCollisionBasic(bodyA, bodyB, normal, depth);
 
+            bodyA.IsColliding = true;
+            bodyB.IsColliding = true;
+
             lock (lockOject)
             {
-                CollisionResolution.ResolveCollisionAdvanced(in contact);
+                if (bodyA.HandleCollision && bodyB.HandleCollision)
+                    CollisionResolution.ResolveCollisionAdvanced(in contact);
             }
 
             SeparateBodies(bodyA, bodyB, normal * depth, bounds);
@@ -117,37 +138,16 @@ internal class WorldPhysics
         }
     }
 
-    // Check if 2 bodies are colliding
-    private static void CollisionNarrowPhase(List<PhysicsBody2D> bodies, CameraBounds bounds)
-    {
-        List<Task> tasks = new List<Task>();
-        // Sometimes a projectile body might be destroyed in the middle of the loop, so we need to handle the exception
-        try
-        {
-            foreach ((int, int) pair in contactPairs)
-            {
-                if (Properties.EnableMT)
-                    tasks.Add(Task.Factory.StartNew((Object state) =>
-                    { ResolvePair(((State)state).bodies, ((State)state).pair, ((State)state).bounds); }, (Object)(new State(bodies, pair, bounds))));
-                //ThreadPool.QueueUserWorkItem(, (Object)(new State(bodies, pair)));
-                else
-                    ResolvePair(bodies, pair, bounds);
-            }
-
-            Task.WaitAll(tasks.ToArray());
-            tasks.Clear();
-        }
-        catch (Exception) { }
-    }
     // Seperate colliding bodies
     private static void SeparateBodies(PhysicsBody2D bodyA, PhysicsBody2D bodyB, Vector2 direction, CameraBounds bounds)
     {
         // Check if either body exceeds the camera bounds
         if (CollisionHelper.AABBExceedsBounds(bodyA.GetAABB(), bounds) ||
             CollisionHelper.AABBExceedsBounds(bodyB.GetAABB(), bounds))
-        {
             return;
-        }
+
+        if (!(bodyA.HandleCollision && bodyB.HandleCollision))
+            return;
 
         if (bodyA is ProjectileBody2D || bodyB is ProjectileBody2D)
         {

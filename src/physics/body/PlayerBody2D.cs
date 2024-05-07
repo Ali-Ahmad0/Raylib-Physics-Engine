@@ -1,8 +1,8 @@
 ﻿using GameEngine.src.physics.component;
 using Raylib_cs;
 using System.Numerics;
-using GameEngine.src.helper;
 using GameEngine.src.input;
+using GameEngine.src.helper;
 
 namespace GameEngine.src.physics.body;
 
@@ -30,7 +30,6 @@ public class PlayerBody2D : RigidBox2D
 
         // Initialize the player animations
         createAnimations();
-
     }
 
     public void UseDefaultMotion(double delta)
@@ -39,17 +38,29 @@ public class PlayerBody2D : RigidBox2D
         Jump(delta);
     }
 
+    // Default Player Motion logic (optional)
+    private float maxSpeed = 6000;
+    private float acceleration = 500;
+
+    private float landDeceleration = 750;
+    private float airDeceleration  = 300;
+
+    private const int JUMP_BUFFER_TIME = 15;
+    private const int CAYOTE_JUMP_TIME = 10;
+
+    private int jumpBufferCounter = 0;
+    private int cayoteJumpCounter = 0;
+
     private void MovePlayer(double delta)
     {
         float keyboardDirection = 0f;
         float gamepadDirection = 0f;
-        float magnitude = 6000;
 
         // Check keyboard input
         keyboardDirection = Input.GetDirection("left", "right");
 
         // Check gamepad input if connected
-        if (Raylib.IsGamepadAvailable (0))
+        if (Raylib.IsGamepadAvailable(0))
         {
             gamepadDirection = Gamepad.GetDirection("left", "right");
         }
@@ -57,19 +68,60 @@ public class PlayerBody2D : RigidBox2D
         // Use gamepad direction only if keyboard direction is not providing input
         float direction = keyboardDirection != 0f ? keyboardDirection : gamepadDirection;
 
-        // Adjust magnitude
-        direction *= magnitude;
+        if (direction != 0)
+        {
+            LinVelocity.X += acceleration * direction * (float)delta;
+        }
 
-        // Apply velocity
-        LinVelocity.X = direction * (float)delta;
+        else
+        {
+            LinVelocity.X = IsOnFloor ? MathExtra.MoveToward(LinVelocity.X, 0, landDeceleration * (float)delta)
+            : MathExtra.MoveToward(LinVelocity.X, 0, airDeceleration * (float)delta);
+        }
+
+        LinVelocity.X = (float)Math.Clamp(LinVelocity.X, -maxSpeed * delta, maxSpeed * delta);
+        
     }
 
     private void Jump(double delta)
     {
-        if ((Input.IsKeyPressed("jump") || Gamepad.IsButtonPressed("jump")) && IsOnFloor)
+        if (!IsOnFloor)
         {
-            LinVelocity.Y = -5000 * (float)delta;
+            // Start cayote timer when jumped
+            if (cayoteJumpCounter > 0)
+            {
+                cayoteJumpCounter--;
+            }
+
         }
+
+        // Set cayote timer when player is on floor
+        else
+        {
+            cayoteJumpCounter = CAYOTE_JUMP_TIME;
+
+        }
+
+        if ((Input.IsKeyPressed("jump") || Gamepad.IsButtonPressed("jump")))
+        {
+            jumpBufferCounter = JUMP_BUFFER_TIME;
+        }
+
+        // Start the jump buffer timer
+        if (jumpBufferCounter > 0)
+        {
+            jumpBufferCounter--;
+        }
+
+        // Check valid condition for jump
+        if (jumpBufferCounter > 0 && cayoteJumpCounter > 0)
+        {
+            LinVelocity.Y = -0.35f;
+
+            jumpBufferCounter = 0;
+            cayoteJumpCounter = 0;
+        }
+
     }
 
     public void DrawPlayer()

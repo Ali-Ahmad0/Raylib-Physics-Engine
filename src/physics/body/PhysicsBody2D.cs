@@ -36,6 +36,8 @@ public abstract class PhysicsBody2D
     public bool IsOnWallL { get; internal set; }
 
     public bool HandleCollision;
+    public bool IsColliding { get; internal set; }
+
     public bool ApplyGravity;
 
     // Motion attributes
@@ -145,6 +147,8 @@ public abstract class PhysicsBody2D
     internal void ResetCollisionState()
     {
         // Reset all collision-related properties to false 
+        IsColliding = false;
+
         IsOnCeiling = false;
         IsOnFloor = false;
         IsOnWallL = false;
