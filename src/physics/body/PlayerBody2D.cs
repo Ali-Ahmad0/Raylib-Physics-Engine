@@ -35,7 +35,7 @@ public class PlayerBody2D : RigidBox2D
     public void UseDefaultMotion(double delta)
     {
         MovePlayer(delta);
-        Jump(delta);
+        Jump();
     }
 
     // Default Player Motion logic (optional)
@@ -83,7 +83,7 @@ public class PlayerBody2D : RigidBox2D
         
     }
 
-    private void Jump(double delta)
+    private void Jump()
     {
         if (!IsOnFloor)
         {
@@ -164,6 +164,7 @@ public class PlayerBody2D : RigidBox2D
         Raylib.DrawTexturePro(currAnimation.atlas, currAnimation.rectangles[index], dest, origin, 0, Color.White);
     }
 
+    // Animations for the default player character
     private void createAnimations()
     {
         // Implement the new AddAnimation method

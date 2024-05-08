@@ -38,7 +38,7 @@ public struct TileSet
 }
 
 
-internal static class TileMap
+public static class TileMap
 {
     public static void GenerateTileMapTerrain(int[,] grid, int size, List<PhysicsBody2D> bodies)
     {
