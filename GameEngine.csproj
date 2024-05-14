@@ -25,4 +25,8 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="example\assets\tileset\" />
+  </ItemGroup>
+
 </Project>

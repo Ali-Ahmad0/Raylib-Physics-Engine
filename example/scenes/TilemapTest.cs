@@ -1,4 +1,5 @@
-﻿using GameEngine.src.physics.body;
+﻿using GameEngine.src.main;
+using GameEngine.src.physics.body;
 using GameEngine.src.tilemap;
 using GameEngine.src.world;
 using Raylib_cs;
@@ -67,7 +68,7 @@ public class TilemapTest : World2D
                     {10, 10, 10, 20, 20, 20, 20 }
                 },
             size = 4,
-            tileSet = new TileSet("C:/Users/saadk/Desktop/NUST/Semester 2/Object Oriented Programming/End Semester Project/sprites/Dungeon Tile Set/Dungeon Tile Set.png", new Rectangle(0, 0, 16, 16), 10, 10)
+            tileSet = new TileSet(Path.Combine(Properties.ExecutableDirectory, "../../../example/assets/tileset/") + "", new Rectangle(0, 0, 16, 16), 10, 10)
         };
 
         TileMap.GenerateTileMap(ref tileMapProps, bodies);
