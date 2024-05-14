@@ -3,6 +3,7 @@ using Raylib_cs;
 using System.Numerics;
 using GameEngine.src.input;
 using GameEngine.src.helper;
+using GameEngine.src.main;
 
 namespace GameEngine.src.physics.body;
 
@@ -198,21 +199,19 @@ public class PlayerBody2D : RigidBox2D
     // Animations for the default player character
     private void createAnimations()
     {
-        // Get the directory of the executable
-        string executableDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-
         // Construct the relative path from the executable's directory to the assets folder
-        string relativePath = Path.Combine("..", "..", "..", "example", "assets", "player");
+        string relativePath = "../../../example/assets/player";
 
         // Combine the executable directory with the relative path to get the full path to the assets folder
-        string fullPath = Path.GetFullPath(Path.Combine(executableDirectory, relativePath));
+        string path = Path.GetFullPath(Path.Combine(Properties.ExecutableDirectory, relativePath)) + "/";
+        Rectangle size = new Rectangle(0, 40, 40, 40);
 
-        AddAnimation(Path.Combine(fullPath, "_Idle.png"), 10, 10, new Rectangle(0, 40, 40, 40));
-        AddAnimation(Path.Combine(fullPath, "_Run.png"), 12, 10, new Rectangle(0, 40, 40, 40));
-        AddAnimation(Path.Combine(fullPath, "_Jump.png"), 12, 3, new Rectangle(0, 40, 40, 40));
-        AddAnimation(Path.Combine(fullPath, "_Fall.png"), 12, 3, new Rectangle(0, 40, 40, 40));
-        AddAnimation(Path.Combine(fullPath, "_Crouch.png"), 1, 1, new Rectangle(0, 40, 40, 40));
-        AddAnimation(Path.Combine(fullPath, "_CrouchWalk.png"), 10, 8, new Rectangle(0, 40, 40, 40));
+        AddAnimation(path + "_Idle.png", 10, 10, size);
+        AddAnimation(path + "_Run.png", 12, 10, size);
+        AddAnimation(path + "_Jump.png", 12, 3, size);
+        AddAnimation(path + "_Fall.png", 12, 3, size);
+        AddAnimation(path + "_Crouch.png", 1, 1, size);
+        AddAnimation(path + "_CrouchWalk.png", 10, 8, size);
     }
 
     public void AddAnimation(string path, int framesPerSecond, int numberOfSprite, Rectangle spriteSize)
