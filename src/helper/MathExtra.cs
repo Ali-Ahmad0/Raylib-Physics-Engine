@@ -27,6 +27,7 @@ public static class MathExtra
         }
     }
 
+    // Returns Z component of the cross product
     public static float Cross(Vector2 a, Vector2 b)
     {
         // cz = ax * by − ay * bx

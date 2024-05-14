@@ -8,25 +8,21 @@ namespace GameEngine.src.physics.body;
 
 public enum PlayerStates
 {
-    IDLE,
-    WALK,
-    JUMP,
-    FALL,
-    CROUCH,
-    DIE
+    IDLE, WALK, JUMP, FALL, CROUCH_IDLE, CROUCH_WALK, DIE
 }
 
 public class PlayerBody2D : RigidBox2D
 {
     internal PlayerStates State { get; set; }
 
-    private Animation[] animations;
+    private List<Animation> animations;
     public PlayerBody2D(Vector2 position, float rotation, float width, float height, List<Component> components) :
         base(position, rotation, 0.985f * width * height, 0.985f, width * height, 0f, width, height, components) 
     {
         // Initialize the player
         State = PlayerStates.IDLE;
-        animations = new Animation[6];
+        animations = new List<Animation>();
+        flipH = false;
 
         // Initialize the player animations
         createAnimations();
@@ -35,13 +31,12 @@ public class PlayerBody2D : RigidBox2D
     public void UseDefaultMotion(double delta)
     {
         MovePlayer(delta);
+        Crouch();
         Jump();
-
-        Console.WriteLine(State);
     }
 
     // Default Player Motion logic (optional)
-    private float maxSpeed = 6000;
+    private float maxSpeed = 5000;
     private float acceleration = 500;
 
     private float landDeceleration = 750;
@@ -52,6 +47,8 @@ public class PlayerBody2D : RigidBox2D
 
     private int jumpBufferCounter = 0;
     private int cayoteJumpCounter = 0;
+
+    private bool flipH;
 
     private void MovePlayer(double delta)
     {
@@ -74,6 +71,8 @@ public class PlayerBody2D : RigidBox2D
         {
             LinVelocity.X += acceleration * direction * (float)delta;
             State = PlayerStates.WALK;
+
+            flipH = direction < 0;
         }
 
         else
@@ -88,6 +87,21 @@ public class PlayerBody2D : RigidBox2D
         
     }
 
+    // Crouching
+    private void Crouch()
+    {
+        if ((Input.IsKeyDown("crouch") || Gamepad.IsButtonDown("crouch")) && IsOnFloor)
+        {
+            maxSpeed = 2000;
+            State = LinVelocity.X == 0 ? PlayerStates.CROUCH_IDLE : PlayerStates.CROUCH_WALK;
+        }
+
+        else
+        {
+            maxSpeed = 5000;
+        }
+    }
+
     private void Jump()
     {
         if (!IsOnFloor)
@@ -98,16 +112,7 @@ public class PlayerBody2D : RigidBox2D
                 cayoteJumpCounter--;
             }
 
-
-            if (LinVelocity.Y < 0)
-            {
-                State = PlayerStates.JUMP;
-            }
-            
-            else
-            {
-                State = PlayerStates.FALL;
-            }
+            State = LinVelocity.Y < 0 ? PlayerStates.JUMP : PlayerStates.FALL;
 
         }
 
@@ -142,54 +147,75 @@ public class PlayerBody2D : RigidBox2D
 
     public void DrawPlayer()
     {
-        //Animation currAnimation = animations[0];
-        //switch (State)
-        //{
-        //    case PlayerStates.IDLE:
-        //        currAnimation = animations[0];
-        //        break;
+        Animation currAnimation = animations[0];
 
-        //    case PlayerStates.WALK:
-        //        currAnimation = animations[1];
-        //        break;
+        switch (State)
+        {
+            case PlayerStates.IDLE:
+                currAnimation = animations[0];
+                break;
 
-        //    case PlayerStates.JUMP:
-        //        currAnimation = animations[2];
-        //        break;
+            case PlayerStates.WALK:
+                currAnimation = animations[1];
+                break;
 
-        //    case PlayerStates.FALL:
-        //        currAnimation = animations[3];
-        //        break;
+            case PlayerStates.JUMP:
+                currAnimation = animations[2];
+                break;
 
-        //    case PlayerStates.CROUCH:
-        //        currAnimation = animations[4];
-        //        break;
+            case PlayerStates.FALL:
+                currAnimation = animations[3];
+                break;
 
-        //    case PlayerStates.DIE:
-        //        currAnimation = animations[5];
-        //        break;
-        //    default:
-        //        break;
-        //}
+            case PlayerStates.CROUCH_IDLE:
+                currAnimation = animations[4];
+                break;
 
+            case PlayerStates.CROUCH_WALK:
+                currAnimation = animations[5];
+                break;
 
-        //Rectangle dest = new Rectangle(Transform.Translation.X, Transform.Translation.Y, Dimensions.Height, Dimensions.Height);
-        //Vector2 origin = new Vector2(Dimensions.Height / 2.75f, Dimensions.Height / 2);
+            default:
+                break;
+        }
+
+        int index = (int)(Raylib.GetTime() * currAnimation.FramesPerSecond) % currAnimation.Rectangles.Count;
         
-        //int index = (int)(Raylib.GetTime() * currAnimation.framesPerSecond) % currAnimation.rectangles.Count;
-        //Raylib.DrawTexturePro(currAnimation.atlas, currAnimation.rectangles[index], dest, origin, 0, Color.White);
+        Rectangle source = currAnimation.Rectangles[index];
+        Rectangle dest = new Rectangle(Transform.Translation.X, Transform.Translation.Y, Dimensions.Height, Dimensions.Height);
+        Vector2 origin = new Vector2(Dimensions.Height / 2.75f, Dimensions.Height / 2);
+
+        if (flipH)
+        {
+            source.Width *= -1;
+            origin.X = Dimensions.Height - origin.X; // Adjusting the origin when flipped horizontally
+        }
+
+        Raylib.DrawTexturePro(currAnimation.Atlas, source, dest, origin, 0, Color.White);
+
     }
 
     // Animations for the default player character
     private void createAnimations()
     {
-        // Implement the new AddAnimation method
-        string path = "C:/Users/saadk/Desktop/NUST/Semester 2/Object Oriented Programming/End Semester Project/sprites/Hero Knight/Sprites/";
-        AddAnimation(PlayerStates.IDLE, path + "_Idle.png", 1, 10, new Rectangle(0, 40, 40, 40));
-        AddAnimation(PlayerStates.WALK, path + "Run.png", 10, 8, new Rectangle(0, 0, 180, 180));
+        // Get the directory of the executable
+        string executableDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+
+        // Construct the relative path from the executable's directory to the assets folder
+        string relativePath = Path.Combine("..", "..", "..", "example", "assets", "player");
+
+        // Combine the executable directory with the relative path to get the full path to the assets folder
+        string fullPath = Path.GetFullPath(Path.Combine(executableDirectory, relativePath));
+
+        AddAnimation(Path.Combine(fullPath, "_Idle.png"), 10, 10, new Rectangle(0, 40, 40, 40));
+        AddAnimation(Path.Combine(fullPath, "_Run.png"), 12, 10, new Rectangle(0, 40, 40, 40));
+        AddAnimation(Path.Combine(fullPath, "_Jump.png"), 12, 3, new Rectangle(0, 40, 40, 40));
+        AddAnimation(Path.Combine(fullPath, "_Fall.png"), 12, 3, new Rectangle(0, 40, 40, 40));
+        AddAnimation(Path.Combine(fullPath, "_Crouch.png"), 1, 1, new Rectangle(0, 40, 40, 40));
+        AddAnimation(Path.Combine(fullPath, "_CrouchWalk.png"), 10, 8, new Rectangle(0, 40, 40, 40));
     }
 
-    public void AddAnimation(PlayerStates state, string path, int framesPerSecond, int numberOfSprite, Rectangle spriteSize)
+    public void AddAnimation(string path, int framesPerSecond, int numberOfSprite, Rectangle spriteSize)
     {
         List<Rectangle> rectangles = new List<Rectangle>();
         for (int i = 0; i < numberOfSprite; i++)
@@ -197,7 +223,8 @@ public class PlayerBody2D : RigidBox2D
             rectangles.Add(new Rectangle(spriteSize.X + (i * 3 + 1) * spriteSize.Width, spriteSize.Y, spriteSize.Width, spriteSize.Height));
         }
         Animation anim = new Animation(Raylib.LoadTexture(path), framesPerSecond, rectangles);
-        animations[(int)state] = anim;
+        animations.Add(anim);
+        
     }
 }
 

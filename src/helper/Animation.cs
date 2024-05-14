@@ -4,14 +4,14 @@ namespace GameEngine.src.helper;
 
 public struct Animation
 {
-    public Texture2D atlas;
-    public int framesPerSecond;
-    public List<Rectangle> rectangles;
+    public Texture2D Atlas { get; private set; }
+    public int FramesPerSecond { get; private set; }
+    public List<Rectangle> Rectangles { get; private set; }
 
     public Animation(Texture2D atlas, int framesPerSecond, List<Rectangle> rectangles)
     {
-        this.atlas = atlas;
-        this.framesPerSecond = framesPerSecond;
-        this.rectangles = rectangles;
+        Atlas = atlas;
+        FramesPerSecond = framesPerSecond;
+        Rectangles = rectangles;
     }
 }

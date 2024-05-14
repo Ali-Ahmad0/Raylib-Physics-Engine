@@ -29,27 +29,10 @@ public class RigidBody2D : PhysicsBody2D
         this.components = components;
     }
 
-    // Self explanatory 
-    // Translate the physics body by the specified direction vector
-
-
     // Apply a force to the physics body
     public override void ApplyForce(Vector2 amount)
     {
         Force = amount;
-    }
-
-    // Add a component to the physics body
-    public void AddComponent(Component component)
-    {
-        if (!components.Exists(c => c.GetType() == component.GetType()))
-            components.Add(component);
-    }
-
-    // Remove a component from the physics body
-    public void RemoveComponent(Type componentToRemove)
-    {
-        components.RemoveAll(c => c.GetType() == componentToRemove);
     }
 
     // Run all components attached to the physics body in parallel

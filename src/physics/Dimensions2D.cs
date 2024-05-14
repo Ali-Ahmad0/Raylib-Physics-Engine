@@ -11,6 +11,7 @@ public class Dimensions2D
     public readonly float Height;
     public readonly float Width;
 
+    // Constructor 
     public Dimensions2D() { }
     public Dimensions2D(float radius, float area)
     {

@@ -158,14 +158,14 @@ public abstract class PhysicsBody2D
     public void Translate(Vector2 direction)
     {
         Transform.Translate(direction);
-        SetUpdateRequiredTrue(); // Mark vertices and AABB as dirty
+        SetUpdateRequiredTrue(); 
     }
 
     // Rotate the physics body by the specified angle in radians
     public void Rotate(float angle)
     {
         Transform.Rotate(angle);
-        SetUpdateRequiredTrue(); // Mark vertices and AABB as dirty
+        SetUpdateRequiredTrue(); 
     }
 
     // Method to update vertices and AABB

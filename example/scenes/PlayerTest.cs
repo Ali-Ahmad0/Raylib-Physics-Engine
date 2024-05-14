@@ -90,7 +90,7 @@ internal class PlayerTest : World2D
         // Scene title
         Raylib.DrawText("Player Test", 20, 20, 32, Color.Green);
 
-        for (int i = 0; i < bodies.Count; i++)
+        for (int i = 1; i < bodies.Count; i++)
         {
             DrawCollisionShapes(bodies[i], colors[i % 5]);
         }
