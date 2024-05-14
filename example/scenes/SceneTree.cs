@@ -3,7 +3,7 @@ using GameEngine.src.input;
 using GameEngine.src.world;
 using Raylib_cs;
 
-namespace GameEngine.res.scenes;
+namespace Game.res.scenes;
 
 public static class SceneTree
 {

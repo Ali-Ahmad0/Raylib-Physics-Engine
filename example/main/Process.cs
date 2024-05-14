@@ -1,8 +1,8 @@
-﻿using GameEngine.res.scenes;
+﻿using Game.res.scenes;
 using GameEngine.src.main;
 using Raylib_cs;
 
-namespace GameEngine.main;
+namespace Game.main;
 internal class Process
 {
     // Define percentages for element positions and sizes

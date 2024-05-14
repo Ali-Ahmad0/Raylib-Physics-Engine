@@ -1,4 +1,4 @@
-﻿namespace GameEngine.main;
+﻿namespace Game.main;
 
 public class MainClass
 {

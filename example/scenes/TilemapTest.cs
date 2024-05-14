@@ -4,7 +4,7 @@ using GameEngine.src.world;
 using Raylib_cs;
 using System.Numerics;
 
-namespace GameEngine.res.scenes;
+namespace Game.res.scenes;
 
 public class TilemapTest : World2D
 {

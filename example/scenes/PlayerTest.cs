@@ -4,7 +4,7 @@ using Raylib_cs;
 using System.Numerics;
 using GameEngine.src.tilemap;
 
-namespace GameEngine.res.scenes;
+namespace Game.res.scenes;
 
 internal class PlayerTest : World2D
     {

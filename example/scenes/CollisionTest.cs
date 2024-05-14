@@ -5,7 +5,7 @@ using GameEngine.src.physics.body;
 using GameEngine.src.input;
 using GameEngine.src.helper;
 
-namespace GameEngine.res.scenes;
+namespace Game.res.scenes;
 
 public class CollisionTest : World2D
 {
