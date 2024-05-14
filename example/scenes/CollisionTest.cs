@@ -112,7 +112,7 @@ public class CollisionTest : World2D
         {
 
             // Create box rigid body
-            CreateRigidBody(Raylib.GetMousePosition(), 0f, scaleBox, 1f, 0.5f, 64f, 64f, out RigidBody2D rigidBody);
+            CreateRigidBody(Mouse.GetPos(), 0f, scaleBox, 1f, 0.5f, 64f, 64f, out RigidBody2D rigidBody);
             bodies.Add(rigidBody);
 
         } 

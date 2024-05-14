@@ -36,6 +36,8 @@ public class PlayerBody2D : RigidBox2D
     {
         MovePlayer(delta);
         Jump();
+
+        Console.WriteLine(State);
     }
 
     // Default Player Motion logic (optional)
@@ -71,12 +73,15 @@ public class PlayerBody2D : RigidBox2D
         if (direction != 0)
         {
             LinVelocity.X += acceleration * direction * (float)delta;
+            State = PlayerStates.WALK;
         }
 
         else
         {
             LinVelocity.X = IsOnFloor ? MathExtra.MoveToward(LinVelocity.X, 0, landDeceleration * (float)delta)
             : MathExtra.MoveToward(LinVelocity.X, 0, airDeceleration * (float)delta);
+
+            State = PlayerStates.IDLE;
         }
 
         LinVelocity.X = (float)Math.Clamp(LinVelocity.X, -maxSpeed * delta, maxSpeed * delta);
@@ -91,6 +96,17 @@ public class PlayerBody2D : RigidBox2D
             if (cayoteJumpCounter > 0)
             {
                 cayoteJumpCounter--;
+            }
+
+
+            if (LinVelocity.Y < 0)
+            {
+                State = PlayerStates.JUMP;
+            }
+            
+            else
+            {
+                State = PlayerStates.FALL;
             }
 
         }
@@ -126,42 +142,42 @@ public class PlayerBody2D : RigidBox2D
 
     public void DrawPlayer()
     {
-        Animation currAnimation = animations[0];
-        switch (State)
-        {
-            case PlayerStates.IDLE:
-                currAnimation = animations[0];
-                break;
+        //Animation currAnimation = animations[0];
+        //switch (State)
+        //{
+        //    case PlayerStates.IDLE:
+        //        currAnimation = animations[0];
+        //        break;
 
-            case PlayerStates.WALK:
-                currAnimation = animations[1];
-                break;
+        //    case PlayerStates.WALK:
+        //        currAnimation = animations[1];
+        //        break;
 
-            case PlayerStates.JUMP:
-                currAnimation = animations[2];
-                break;
+        //    case PlayerStates.JUMP:
+        //        currAnimation = animations[2];
+        //        break;
 
-            case PlayerStates.FALL:
-                currAnimation = animations[3];
-                break;
+        //    case PlayerStates.FALL:
+        //        currAnimation = animations[3];
+        //        break;
 
-            case PlayerStates.CROUCH:
-                currAnimation = animations[4];
-                break;
+        //    case PlayerStates.CROUCH:
+        //        currAnimation = animations[4];
+        //        break;
 
-            case PlayerStates.DIE:
-                currAnimation = animations[5];
-                break;
-            default:
-                break;
-        }
+        //    case PlayerStates.DIE:
+        //        currAnimation = animations[5];
+        //        break;
+        //    default:
+        //        break;
+        //}
 
 
-        Rectangle dest = new Rectangle(Transform.Translation.X, Transform.Translation.Y, Dimensions.Height, Dimensions.Height);
-        Vector2 origin = new Vector2(Dimensions.Height / 2.75f, Dimensions.Height / 2);
+        //Rectangle dest = new Rectangle(Transform.Translation.X, Transform.Translation.Y, Dimensions.Height, Dimensions.Height);
+        //Vector2 origin = new Vector2(Dimensions.Height / 2.75f, Dimensions.Height / 2);
         
-        int index = (int)(Raylib.GetTime() * currAnimation.framesPerSecond) % currAnimation.rectangles.Count;
-        Raylib.DrawTexturePro(currAnimation.atlas, currAnimation.rectangles[index], dest, origin, 0, Color.White);
+        //int index = (int)(Raylib.GetTime() * currAnimation.framesPerSecond) % currAnimation.rectangles.Count;
+        //Raylib.DrawTexturePro(currAnimation.atlas, currAnimation.rectangles[index], dest, origin, 0, Color.White);
     }
 
     // Animations for the default player character
