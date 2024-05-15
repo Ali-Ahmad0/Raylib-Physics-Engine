@@ -4,6 +4,8 @@ using Raylib_cs;
 using System.Numerics;
 using GameEngine.src.tilemap;
 using GameEngine.src.main;
+using GameEngine.src.helper;
+using GameEngine.src.input;
 
 namespace Game.res.scenes;
 
@@ -73,6 +75,11 @@ internal class PlayerTest : World2D
         // Create a camera centered at the middle of the screen
         camera = new Camera2D(Vector2.Zero, Vector2.Zero, 0, 1f);
 
+        Input.AssignKey("jump", KeyboardKey.Space);
+        Input.AssignKey("crouch", KeyboardKey.LeftControl);
+
+        Gamepad.AssignButton("jump", GamepadButton.RightFaceDown);
+        Gamepad.AssignButton("crouch", GamepadButton.RightFaceRight);
     }
 
     public override void Update(double delta)
