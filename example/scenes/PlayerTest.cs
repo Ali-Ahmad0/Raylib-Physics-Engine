@@ -11,7 +11,6 @@ internal class PlayerTest : World2D
     {
     private TileMapProps tileMapProps;
     private List<PhysicsBody2D> bodies;
-    private List<Color> colors;
 
     private Camera2D camera;
 
@@ -23,13 +22,6 @@ internal class PlayerTest : World2D
         CreatePlayerBody(new Vector2(128, 512), 0, 1f, 64f, 128f, out PlayerBody2D player);
         bodies.Add(player);
 
-        colors = new List<Color>() {
-            Color.White,
-            Color.Red,
-            Color.Green,
-            Color.Blue,
-            Color.Gold
-        };
 
         // Tilemap
         tileMapProps = new TileMapProps()
