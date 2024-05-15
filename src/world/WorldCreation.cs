@@ -1,9 +1,7 @@
 ﻿using GameEngine.src.physics.component;
 using GameEngine.src.physics.body;
 using Raylib_cs;
-
 using System.Numerics;
-using System.Formats.Asn1;
 
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 
@@ -23,7 +21,6 @@ internal class WorldCreation
         new Motion(),
         new Gravity()
     };
-
 
     // Render the shape for a physics body
     internal static void DrawCollisionShapes(PhysicsBody2D body, Color color)
@@ -55,6 +52,11 @@ internal class WorldCreation
 
             default: throw new Exception("[ERROR]: Invalid ShapeType");
         }
+    }
+
+    internal static void DrawBodySprite(PhysicsBody2D body, Texture2D sprite)
+    {
+
     }
 
     // Creates a Circle RigidBody

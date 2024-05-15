@@ -29,11 +29,13 @@ public class PlayerBody2D : RigidBox2D
         createAnimations();
     }
 
-    public void UseDefaultMotion(double delta)
+    public void UseDefaultPlayer(double delta)
     {
         MovePlayer(delta);
         Crouch();
         Jump();
+
+        DrawPlayer();
     }
 
     // Default Player Motion logic (optional)
@@ -146,7 +148,7 @@ public class PlayerBody2D : RigidBox2D
 
     }
 
-    public void DrawPlayer()
+    private void DrawPlayer()
     {
         Animation currAnimation = animations[0];
 
@@ -180,25 +182,7 @@ public class PlayerBody2D : RigidBox2D
                 break;
         }
 
-        PlayAnimation(currAnimation);
-
-    }
-
-    private void PlayAnimation(Animation currAnimation)
-    {
-        int index = (int)(Raylib.GetTime() * currAnimation.FramesPerSecond) % currAnimation.Rectangles.Count;
-
-        Rectangle source = currAnimation.Rectangles[index];
-        Rectangle dest = new Rectangle(Transform.Translation.X, Transform.Translation.Y, Dimensions.Height, Dimensions.Height);
-        Vector2 origin = new Vector2(Dimensions.Height / 2.75f, Dimensions.Height / 2);
-
-        if (flipH)
-        {
-            source.Width *= -1;
-            origin.X = Dimensions.Height - origin.X; // Adjusting the origin when flipped horizontally
-        }
-
-        Raylib.DrawTexturePro(currAnimation.Atlas, source, dest, origin, 0, Color.White);
+        currAnimation.Play(this, flipH);
     }
 
     // Animations for the default player character

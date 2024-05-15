@@ -1,5 +1,4 @@
-﻿using GameEngine.src.main;
-using GameEngine.src.physics.body;
+﻿using GameEngine.src.physics.body;
 using GameEngine.src.tilemap;
 using GameEngine.src.world;
 using Raylib_cs;
@@ -49,26 +48,8 @@ public class TilemapTest : World2D
                     { 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0 }
 
                 },
-            textureMap = new int[,]
-                {
-                    { -1, -1, -1, -1, -1, -1, -1 },
-                    { -1, -1, -1, -1, -1, -1, -1 },
-                    { 17, 17, 17, 20, 20, 20, 20 },
-                    { 10, 10, 10, 20, 20, 20, 20 },
-                    { 10, 10, 10, 20, 20, 20, 20 },
-                    { 10, 10, 10, 20, 20, 20, 20 },
-                    { 10, 10, 10, 20, 20, 20, 20 },
-                    { 10, 10, 10, 20, 20, 20, 20 },
-                    { 10, 10, 10, 20, 20, 20, 20 },
-                    { 10, 10, 10, 20, 20, 20, 20 },
-                    { 10, 10, 10, 20, 20, 20, 20 },
-                    { 10, 10, 10, 20, 20, 20, 20 },
-                    { 10, 10, 10, 20, 20, 20, 20 },
-                    { 10, 10, 10, 20, 20, 20, 20 },
-                    { 10, 10, 10, 20, 20, 20, 20 }
-                },
-            size = 4,
-            tileSet = new TileSet(Path.Combine(Properties.ExecutableDirectory, "../../../example/assets/tileset/") + "tileset.png", new Rectangle(0, 0, 16, 16), 15, 18)
+            size = 4
+            
         };
 
         TileMap.GenerateTileMap(ref tileMapProps, bodies);
@@ -94,8 +75,6 @@ public class TilemapTest : World2D
         {
             DrawCollisionShapes(bodies[i], colors[i % 5]);
         }
-
-        //TileMap.DrawBackground(tileMapProps);
     }
 
 }
