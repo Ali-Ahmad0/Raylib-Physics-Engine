@@ -1,5 +1,4 @@
 ﻿using GameEngine.src.helper;
-using GameEngine.src.input;
 using GameEngine.src.main;
 using GameEngine.src.physics.body;
 using GameEngine.src.world;
