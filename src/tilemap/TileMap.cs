@@ -73,7 +73,7 @@ public static class TileMap
                 }
             }
         }
-        mergeVerticalBoxes(boxes);
+        MergeVerticalBoxes(boxes);
         return boxes;
     }
 
@@ -92,7 +92,7 @@ public static class TileMap
         }
     }
 
-    private static void mergeVerticalBoxes(List<Rectangle> boxes)
+    private static void MergeVerticalBoxes(List<Rectangle> boxes)
     {
         for (int i = 0; i < boxes.Count; i++)
         {
@@ -118,7 +118,7 @@ public static class TileMap
             {
                 if (textureMap[i, j] >= 0)
                 {
-                    Rectangle source = new Rectangle((textureMap[i, j] % 10 % tileSet.columns * tileSet.rect.Width) + tileSet.rect.X, (textureMap[i, j] / 10 % tileSet.rows * tileSet.rect.Height) + tileSet.rect.Y, tileSet.rect.Width, tileSet.rect.Height);
+                    Rectangle source = new Rectangle((textureMap[i, j] % tileSet.columns * tileSet.rect.Width) + tileSet.rect.X, (textureMap[i, j] / tileSet.columns % tileSet.rows * tileSet.rect.Height) + tileSet.rect.Y, tileSet.rect.Width, tileSet.rect.Height);
                     Rectangle dest = new Rectangle(j * size, i * size, size, size);
                     Raylib.DrawTexturePro(tileSet.texture, source, dest, new Vector2(0, 0), 0, Color.White);
                 }

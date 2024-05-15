@@ -21,7 +21,7 @@ public static class SceneTree
         Input.AssignKey("four", KeyboardKey.Four);
 
         Input.AssignKey("jump", KeyboardKey.Space);
-        Input.AssignKey("crouch", KeyboardKey.LeftShift);
+        Input.AssignKey("crouch", KeyboardKey.LeftControl);
 
         Gamepad.AssignButton("l2", GamepadButton.LeftTrigger2);
         Gamepad.AssignButton("r2", GamepadButton.RightTrigger2);

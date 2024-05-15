@@ -3,6 +3,7 @@ using GameEngine.src.world;
 using Raylib_cs;
 using System.Numerics;
 using GameEngine.src.tilemap;
+using GameEngine.src.main;
 
 namespace Game.res.scenes;
 
@@ -54,11 +55,24 @@ internal class PlayerTest : World2D
                 },
             textureMap = new int[,]
                 {
-                    {1, 1, 1},
-                    {1, 1, 1},
-                    {1, 0, 2}
+                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 17, 17, 0, 0, 0, 17, 17, 17, 0, 0, 0, 0, 0, 0},
+                    {0, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 0},
+                    {0, 17, 17, 17, 0, 0, 17, 17, 0, 0, 0, 17, 17, 17, 0, 0, 17, 17, 17, 0},
+                    {0, 17, 17, 17, 0, 0, 17, 17, 0, 0, 0, 17, 17, 17, 0, 0, 17, 17, 17, 0}
                 },
             size = 4,
+            tileSet = new TileSet(Path.Combine(Properties.ExecutableDirectory, "../../../example/assets/tileset/") + "tileset.png", new Rectangle(0, 0, 16, 16), 15, 18)
         };
 
         TileMap.GenerateTileMap(ref tileMapProps, bodies);
@@ -89,11 +103,7 @@ internal class PlayerTest : World2D
     {
         // Scene title
         Raylib.DrawText("Player Test", 20, 20, 32, Color.Green);
-
-        for (int i = 1; i < bodies.Count; i++)
-        {
-            DrawCollisionShapes(bodies[i], colors[i % 5]);
-        }
+        TileMap.DrawBackground(tileMapProps);
     }
 
 }
