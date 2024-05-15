@@ -77,9 +77,11 @@ internal class PlayerTest : World2D
 
         Input.AssignKey("jump", KeyboardKey.Space);
         Input.AssignKey("crouch", KeyboardKey.LeftControl);
+        Input.AssignKey("attack", KeyboardKey.Z);
 
         Gamepad.AssignButton("jump", GamepadButton.RightFaceDown);
         Gamepad.AssignButton("crouch", GamepadButton.RightFaceRight);
+        Gamepad.AssignButton("attack", GamepadButton.RightTrigger2);
     }
 
     public override void Update(double delta)

@@ -1,26 +1,34 @@
 ﻿using GameEngine.src.physics.body;
 using Raylib_cs;
 using System.Numerics;
+using System.Reflection.Metadata.Ecma335;
 
 public struct Animation
 {
     public Texture2D Atlas { get; private set; }
     public int FramesPerSecond { get; private set; }
-    public int CurrentFrame { get; private set; }
+    private int CurrentFrame; 
     public List<Rectangle> Rectangles { get; private set; }
+    public int TotalFrames { get; private set; } 
 
     public Animation(Texture2D atlas, int framesPerSecond, List<Rectangle> rectangles)
     {
         Atlas = atlas;
         FramesPerSecond = framesPerSecond;
         Rectangles = rectangles;
-        CurrentFrame = 0; // Initialize the current frame index to 0
+        TotalFrames = rectangles.Count; // Calculate and store the total number of frames
+        CurrentFrame = 0;
+    }
+
+    public int GetUpdatedFrame()
+    {
+        return (int)(Raylib.GetTime() * FramesPerSecond) % TotalFrames;
     }
 
     // Plays the animation on a body
     public void Play(PhysicsBody2D body, bool flipH = false, bool flipV = false)
     {
-        CurrentFrame = (int)(Raylib.GetTime() * FramesPerSecond) % Rectangles.Count;
+        CurrentFrame = GetUpdatedFrame();
 
         float frameSize = body.Dimensions.Height;
 
@@ -30,7 +38,7 @@ public struct Animation
             frameSize, frameSize
             );
 
-        Vector2 origin = new Vector2(frameSize / 2.75f, frameSize / 2f);
+        Vector2 origin = new Vector2(frameSize / 2f, frameSize / 2f);
 
         if (flipH)
         {
@@ -42,8 +50,8 @@ public struct Animation
     }
 
     // Returns if an animation is completed or not
-    public bool Completed()
-    {
-        return CurrentFrame == Rectangles.Count - 1;
-    }
+    //public bool Completed()
+    //{
+    //    return false;
+    //}
 }
