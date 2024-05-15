@@ -47,13 +47,13 @@ public class CollisionTest : World2D
         // Begin 2D mode with the camera
         Raylib.BeginMode2D(camera);
 
-        float keyboardRotation = Input.GetDirection("left", "right") / 5;
+        float keyboardRotation = Input.GetDirection("left", "right") / 4;
         float gamepadRotation = 0f;
 
         // Check gamepad input if connected
         if (Raylib.IsGamepadAvailable(0))
         {
-            gamepadRotation = Gamepad.GetRightXAxis() / 5;
+            gamepadRotation = Gamepad.GetRightXAxis() / 4;
         }
 
         // Use gamepad rotation only if keyboard rotation is not providing input
@@ -124,6 +124,6 @@ public class CollisionTest : World2D
         }
 
         // Cursor icon
-        Raylib.DrawText("<>", (int)cursorPos.X, (int)cursorPos.Y, 32, Color.Green);
+        Raylib.DrawText("< >", (int)cursorPos.X, (int)cursorPos.Y, 32, Color.Green);
     }
 }

@@ -79,7 +79,7 @@ public class ProjectileTest : World2D
             DrawCollisionShapes(bodies[i], colors[i % 5]);
         }
 
-        Raylib.DrawText("<>", (int)cursorPos.X, (int)cursorPos.Y, 32, Color.Green);
+        Raylib.DrawText("< >", (int)cursorPos.X, (int)cursorPos.Y, 32, Color.Green);
     }
 
 
