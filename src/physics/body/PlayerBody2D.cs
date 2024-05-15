@@ -180,8 +180,14 @@ public class PlayerBody2D : RigidBox2D
                 break;
         }
 
+        PlayAnimation(currAnimation);
+
+    }
+
+    private void PlayAnimation(Animation currAnimation)
+    {
         int index = (int)(Raylib.GetTime() * currAnimation.FramesPerSecond) % currAnimation.Rectangles.Count;
-        
+
         Rectangle source = currAnimation.Rectangles[index];
         Rectangle dest = new Rectangle(Transform.Translation.X, Transform.Translation.Y, Dimensions.Height, Dimensions.Height);
         Vector2 origin = new Vector2(Dimensions.Height / 2.75f, Dimensions.Height / 2);
@@ -193,7 +199,6 @@ public class PlayerBody2D : RigidBox2D
         }
 
         Raylib.DrawTexturePro(currAnimation.Atlas, source, dest, origin, 0, Color.White);
-
     }
 
     // Animations for the default player character

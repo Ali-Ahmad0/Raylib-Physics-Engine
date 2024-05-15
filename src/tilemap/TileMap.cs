@@ -80,14 +80,11 @@ public static class TileMap
 
     public static void AddBodies(List<Rectangle> boxes, List<PhysicsBody2D> bodies, int size)
     {
-        Console.WriteLine(boxes.Count);
         // Iterate through the edges and create the bodies
         foreach (Rectangle box in boxes)
         {
-            Console.WriteLine(box);
             Vector2 position = size * (box.Position + new Vector2(box.Width / 2.0f, box.Height / 2.0f));
 
-            Console.WriteLine(position);
             float width = box.Width * size;
             float height = box.Height * size;
             WorldCreation.CreateStaticBody(position, 0f, Vector2.One, 0.5f, width, height, out StaticBody2D staticBody);
@@ -113,28 +110,6 @@ public static class TileMap
         }
     }
 
-    public static Texture2D[,] GenerateBackground(int[,] textureMap)
-    {
-        Texture2D[,] backGround = new Texture2D[textureMap.GetLength(0), textureMap.GetLength(1)];
-        for (int i = 0; i < textureMap.GetLength(0); i++)
-        {
-            for (int j = 0; j < textureMap.GetLength(1); j++)
-            {
-
-                if (textureMap[i, j] != 0)
-                {
-                    backGround[i, j] = Raylib.LoadTexture("C:/Users/saadk/Desktop/NUST/Semester 2/Object Oriented Programming/End Semester Project/sprites/Dungeon Tile Set/Dungeon Tile Set.png");
-                }
-                else
-                {
-                    backGround[i, j] = Raylib.LoadTexture("C:/Users/saadk/Desktop/NUST/Semester 2/Object Oriented Programming/End Semester Project/Physics Engine/res/scenes/Terrain (16x16).png");
-                }
-            }
-        }
-
-        return backGround;
-    }
-
     public static void DrawBackground(TileSet tileSet, int[,] textureMap, int size)
     {
         for (int i = 0; i < textureMap.GetLength(0); i++)
@@ -146,7 +121,6 @@ public static class TileMap
                     Rectangle source = new Rectangle((textureMap[i, j] % 10 % tileSet.columns * tileSet.rect.Width) + tileSet.rect.X, (textureMap[i, j] / 10 % tileSet.rows * tileSet.rect.Height) + tileSet.rect.Y, tileSet.rect.Width, tileSet.rect.Height);
                     Rectangle dest = new Rectangle(j * size, i * size, size, size);
                     Raylib.DrawTexturePro(tileSet.texture, source, dest, new Vector2(0, 0), 0, Color.White);
-                    // System.Console.WriteLine("Drawing");
                 }
             }
         }
