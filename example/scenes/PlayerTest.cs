@@ -9,7 +9,7 @@ using GameEngine.src.input;
 
 namespace Game.res.scenes;
 
-internal class PlayerTest : World2D
+internal class PlayerTest : Global
     {
     private TileMapProps tileMapProps;
     private List<PhysicsBody2D> bodies;

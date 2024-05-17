@@ -1,7 +1,6 @@
 ﻿using GameEngine.src.physics.body;
 using Raylib_cs;
 using System.Numerics;
-using System.Reflection.Metadata.Ecma335;
 
 public struct Animation
 {
@@ -22,7 +21,13 @@ public struct Animation
 
     public int GetUpdatedFrame()
     {
-        return (int)(Raylib.GetTime() * FramesPerSecond) % TotalFrames;
+        int frame = (int)(Raylib.GetTime() * FramesPerSecond) % TotalFrames;
+        if (frame < 0 || frame >= TotalFrames)
+        {
+            // Handle invalid frame calculation (e.g., reset to first frame)
+            frame = 0;
+        }
+        return frame;
     }
 
     // Plays the animation on a body
@@ -50,8 +55,8 @@ public struct Animation
     }
 
     // Returns if an animation is completed or not
-    //public bool Completed()
-    //{
-    //    return false;
-    //}
+    public bool Completed()
+    {
+        return GetUpdatedFrame() >= TotalFrames - 1;
+    }
 }

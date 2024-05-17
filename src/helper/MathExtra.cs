@@ -3,7 +3,7 @@ using System.Numerics;
 
 namespace GameEngine.src.helper;
 
-public static class MathExtra
+public struct MathExtra
 {
     public static float Deg2Rad(float angle)
     {

@@ -87,7 +87,7 @@ public static class TileMap
 
             float width = box.Width * size;
             float height = box.Height * size;
-            WorldCreation.CreateStaticBody(position, 0f, Vector2.One, 0.5f, width, height, out StaticBody2D staticBody);
+            Creation.CreateStaticBody(position, 0f, Vector2.One, 0.5f, width, height, out StaticBody2D staticBody);
             bodies.Add(staticBody);
         }
     }

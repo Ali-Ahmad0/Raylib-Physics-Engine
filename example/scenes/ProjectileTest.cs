@@ -7,7 +7,7 @@ using System.Numerics;
 
 namespace Game.res.scenes;
 
-public class ProjectileTest : World2D
+public class ProjectileTest : Global
 {
     private List<PhysicsBody2D> bodies;
     private List<Color> colors;

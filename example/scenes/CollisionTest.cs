@@ -7,14 +7,13 @@ using GameEngine.src.helper;
 
 namespace Game.res.scenes;
 
-public class CollisionTest : World2D
+public class CollisionTest : Global
 {
     // Member variables
     private List<PhysicsBody2D> bodies;
     private List<Color> colors;
 
     private Camera2D camera;
-
 
     // Constructor for initialization
     internal CollisionTest()
