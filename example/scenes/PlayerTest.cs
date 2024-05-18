@@ -24,6 +24,9 @@ internal class PlayerTest : Global
         CreatePlayerBody(new Vector2(128, 512), 0, 1f, 64f, 128f, out PlayerBody2D player);
         bodies.Add(player);
 
+        int[,] testArr = TileMap.GetArrayFromJSON(Path.Combine(Properties.ExecutableDirectory, "../../../example/assets/tilemap/") + "player_test.json");
+
+        TileMap.PrintArray(testArr);
 
         // Tilemap
         tileMapProps = new TileMapProps()
@@ -45,6 +48,7 @@ internal class PlayerTest : Global
                     {0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0},
                     {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
                     {0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0},
+                    {0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0}
 
                 },
 
