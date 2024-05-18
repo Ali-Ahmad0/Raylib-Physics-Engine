@@ -49,7 +49,6 @@ public struct Animation
         }
         CurrentFrame = GetUpdatedFrame();
 
-
         float frameSize = body.Dimensions.Height;
 
         Rectangle source = Rectangles[CurrentFrame];
@@ -74,7 +73,7 @@ public struct Animation
     {
         // Check if time for animation has completed
         time += Raylib.GetFrameTime();
-        if (time > (float)TotalFrames / FramesPerSecond)
+        if (time >= (float)TotalFrames / FramesPerSecond)
         {
             time = 0;
             return true;

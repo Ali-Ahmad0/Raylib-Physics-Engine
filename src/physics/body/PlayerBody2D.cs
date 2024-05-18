@@ -4,6 +4,7 @@ using System.Numerics;
 using GameEngine.src.input;
 using GameEngine.src.helper;
 using GameEngine.src.main;
+using System.Reflection.Metadata;
 
 namespace GameEngine.src.physics.body;
 
@@ -63,6 +64,8 @@ public class PlayerBody2D : RigidBox2D
 
     private int jumpBufferCounter = 0;
     private int cayoteJumpCounter = 0;
+
+    private int attackCounter = 0;
 
     private bool flipH;
 
@@ -166,7 +169,18 @@ public class PlayerBody2D : RigidBox2D
         if (IsOnFloor)
         {
             if (Input.IsKeyPressed("attack") || Gamepad.IsButtonPressed("attack"))
-                State = PlayerStates.ATTACK;
+            {
+                LinVelocity.X = 0;
+
+                if (State is PlayerStates.CROUCH_IDLE || State is PlayerStates.CROUCH_WALK)
+                    State = PlayerStates.CROUCH_ATTACK;
+
+                else 
+                {
+                    attackCounter = (attackCounter + 1) % 2;
+                    State = PlayerStates.ATTACK;
+                }
+            }
         }
     }
 
@@ -201,13 +215,27 @@ public class PlayerBody2D : RigidBox2D
                 break;
 
             case PlayerStates.ATTACK:
-                currAnimation = animations[6];
+                if (attackCounter == 1)
+                    currAnimation = animations[6];
+
+                else
+                    currAnimation = animations[7];
 
                 if (currAnimation.Completed())
                 {
                     State = PlayerStates.IDLE;
                 }
                     
+                break;
+
+            case PlayerStates.CROUCH_ATTACK:
+                currAnimation = animations[8];
+
+                if (currAnimation.Completed())
+                {
+                    State = PlayerStates.IDLE;
+                }
+
                 break;
 
             default:
@@ -235,6 +263,8 @@ public class PlayerBody2D : RigidBox2D
         AddAnimation(path + "_CrouchWalk.png", 10, 8, size);
 
         AddAnimation(path + "_Attack.png", 10, 4, new Rectangle(0, 40, 120, 40));
+        AddAnimation(path + "_Attack2.png", 16, 6, new Rectangle(0, 40, 120, 40));
+        AddAnimation(path + "_CrouchAttack.png", 10, 4, new Rectangle(0, 40, 120, 40));
     }
 
     public void AddAnimation(string path, int framesPerSecond, int numberOfSprite, Rectangle spriteSize)
