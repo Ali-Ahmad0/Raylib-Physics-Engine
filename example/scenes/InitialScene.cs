@@ -13,7 +13,7 @@ public class InitialScene : Global
     {
         heading = "-Game Engine Test-";
         subheading = "\t\t\t[Press 1 to 5 to view example scenes]\n\n\n" +
-                    "[Or Press L1/R1 on Gamepad to switch scenes]";
+                    "[Or Press L2/R2 on Gamepad to switch scenes]";
     }
 
     public override void Update(double delta)

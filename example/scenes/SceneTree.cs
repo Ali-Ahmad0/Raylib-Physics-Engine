@@ -1,4 +1,5 @@
 ﻿using GameEngine.example.scenes;
+using GameEngine.example.scenes.game;
 using GameEngine.src.helper;
 using GameEngine.src.input;
 using GameEngine.src.world;
@@ -20,6 +21,7 @@ public static class SceneTree
         Input.AssignKey("two", KeyboardKey.Two);
         Input.AssignKey("three", KeyboardKey.Three);
         Input.AssignKey("four", KeyboardKey.Four);
+        Input.AssignKey("five", KeyboardKey.Five);
 
         Gamepad.AssignButton("l2", GamepadButton.LeftTrigger2);
         Gamepad.AssignButton("r2", GamepadButton.RightTrigger2);
@@ -35,10 +37,13 @@ public static class SceneTree
             scene = 2;
         else if (Input.IsKeyPressed("four"))
             scene = 3;
+        else if (Input.IsKeyPressed("five"))
+            scene = 4;
+
         else if (Gamepad.IsButtonPressed("r2"))
-            scene = (scene + 1) % 4; // 4 represents the total number of scenes
+            scene = (scene + 1) % 5; 
         else if (Gamepad.IsButtonPressed("l2"))
-            scene = (scene - 1 + 4) % 4; // 4 represents the total number of scenes
+            scene = (scene - 1 + 4) % 5; 
 
         switch (scene)
         {
@@ -62,10 +67,15 @@ public static class SceneTree
                     currentScene = new PlayerTest();
                 break;
 
+            case 4:
+                if (currentScene is not MainMenu)
+                    currentScene = new MainMenu();
+                break;
+
             default:
                 if (currentScene is not InitialScene)
                 {
-                    if (scene > 3)
+                    if (scene > 4)
                         scene = 0;
 
                     else if (scene < 0)

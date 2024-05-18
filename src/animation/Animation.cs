@@ -43,7 +43,7 @@ public struct Animation
             frameSize, frameSize
             );
 
-        Vector2 origin = new Vector2(frameSize / 2f, frameSize / 2f);
+        Vector2 origin = new Vector2(frameSize / 2.75f, frameSize / 2f);
 
         if (flipH)
         {

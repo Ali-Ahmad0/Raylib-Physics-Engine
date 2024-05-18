@@ -38,6 +38,8 @@ public class PlayerBody2D : RigidBox2D
             Crouch();
         }
 
+        Attack();
+
         DrawPlayer();
     }
 
@@ -151,6 +153,12 @@ public class PlayerBody2D : RigidBox2D
 
     }
 
+    private void Attack()
+    {
+        if (Raylib.IsKeyPressed(KeyboardKey.Z))
+        State = PlayerStates.ATTACK;
+    }
+
     private void DrawPlayer()
     {
         Animation currAnimation = animations[0];
@@ -181,6 +189,10 @@ public class PlayerBody2D : RigidBox2D
                 currAnimation = animations[5];
                 break;
 
+            case PlayerStates.ATTACK:
+                currAnimation = animations[6];
+                break;
+
             default:
                 break;
         }
@@ -204,6 +216,8 @@ public class PlayerBody2D : RigidBox2D
         AddAnimation(path + "_Fall.png", 12, 3, size);
         AddAnimation(path + "_Crouch.png", 1, 1, size);
         AddAnimation(path + "_CrouchWalk.png", 10, 8, size);
+
+        AddAnimation(path + "_Attack.png", 10, 4, new Rectangle(0, 40, 40, 40));
     }
 
     public void AddAnimation(string path, int framesPerSecond, int numberOfSprite, Rectangle spriteSize)
