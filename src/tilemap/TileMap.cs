@@ -153,8 +153,6 @@ public static class TileMap
                 var layers = (JsonElement)item.Value;
                 foreach (var layer in layers.EnumerateArray())
                 {
-                    Console.WriteLine("Layer : " + layer);
-
                     // Get the array of integers in data key
                     var data = layer.GetProperty("data");
                     var width = layer.GetProperty("width");
@@ -168,10 +166,7 @@ public static class TileMap
                         for (int j = 0; j < height.GetInt32(); j++)
                         {
                             ints[i, j] = data[i * height.GetInt32() + j].GetInt32();
-                            if (ints[i, j] != 0)
-                            {
-                                ints[i, j]--;
-                            }
+                            ints[i, j]--;
                         }
                     }
                     return ints;
@@ -180,5 +175,24 @@ public static class TileMap
         }
 
         return null;
+    }
+
+    public static void PrintArray(int[,] arr)
+    {
+        Console.WriteLine("{");
+        for (int i = 0; i < arr.GetLength(0); i++)
+        {
+            Console.Write("{");
+            for (int j = 0; j < arr.GetLength(1); j++)
+            {
+                // check type of each array element
+                // Console.Write(arr[i, j].GetType().Name);
+
+                // print each element
+                Console.Write(arr[i, j] + ", ");
+            }
+            Console.WriteLine("},");
+        }
+        Console.WriteLine("}");
     }
 }
