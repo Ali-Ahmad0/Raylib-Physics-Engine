@@ -2,6 +2,7 @@
 using System.Numerics;
 using Raylib_cs;
 using GameEngine.src.world;
+using System.Text.Json;
 
 namespace GameEngine.src.tilemap;
 
@@ -136,5 +137,48 @@ public static class TileMap
     {
         tileMapProps.size = (int)Math.Pow(2, tileMapProps.size + 2);
         GenerateTileMapTerrain(tileMapProps.tileMap, tileMapProps.size, bodies);
+    }
+
+    private static int[,] GetArrayFromJSON(string path)
+    {
+        String json = System.IO.File.ReadAllText(path);
+        var obj = JsonSerializer.Deserialize<Dictionary<string, object>>(json);
+
+        foreach (var item in obj)
+        {
+            if (item.Key == "layers")
+            {
+                // This json element is an array of objects
+
+                var layers = (JsonElement)item.Value;
+                foreach (var layer in layers.EnumerateArray())
+                {
+                    Console.WriteLine("Layer : " + layer);
+
+                    // Get the array of integers in data key
+                    var data = layer.GetProperty("data");
+                    var width = layer.GetProperty("width");
+                    var height = layer.GetProperty("height");
+
+                    // Create a 2D array of integers
+                    int[,] ints = new int[width.GetInt32(), height.GetInt32()];
+
+                    for (int i = 0; i < width.GetInt32(); i++)
+                    {
+                        for (int j = 0; j < height.GetInt32(); j++)
+                        {
+                            ints[i, j] = data[i * height.GetInt32() + j].GetInt32();
+                            if (ints[i, j] != 0)
+                            {
+                                ints[i, j]--;
+                            }
+                        }
+                    }
+                    return ints;
+                }
+            }
+        }
+
+        return null;
     }
 }
