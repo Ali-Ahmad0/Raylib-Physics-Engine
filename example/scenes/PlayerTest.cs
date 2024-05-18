@@ -45,11 +45,11 @@ internal class PlayerTest : Global
                     {0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0},
                     {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
                     {0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0},
-                    {0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0}
 
                 },
-            textureMap = TileMap.GetArrayFromJSON(Path.Combine(Properties.ExecutableDirectory, "../../../example/assets/tilemap/") + "player_test.json"),
-            size = 4,
+
+        textureMap = TileMap.GetArrayFromJSON(Path.Combine(Properties.ExecutableDirectory, "../../../example/assets/tilemap/") + "player_test.json"),
+        size = 4,
 
             tileSet = new TileSet(Path.Combine(Properties.ExecutableDirectory, "../../../example/assets/tilemap/") + "tileset.png", new Rectangle(0, 0, 16, 16), 15, 18)
         };
@@ -60,6 +60,7 @@ internal class PlayerTest : Global
         // Create a camera centered at the middle of the screen
         camera = new Camera2D(Vector2.Zero, Vector2.Zero, 0, 1f);
     }
+
 
     public override void Update(double delta)
     {

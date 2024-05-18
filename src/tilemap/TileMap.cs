@@ -149,7 +149,6 @@ public static class TileMap
             if (item.Key == "layers")
             {
                 // This json element is an array of objects
-
                 var layers = (JsonElement)item.Value;
                 foreach (var layer in layers.EnumerateArray())
                 {
@@ -161,13 +160,13 @@ public static class TileMap
                     var height = layer.GetProperty("height");
 
                     // Create a 2D array of integers
-                    int[,] ints = new int[width.GetInt32(), height.GetInt32()];
+                    int[,] ints = new int[height.GetInt32(), width.GetInt32()];
 
-                    for (int i = 0; i < width.GetInt32(); i++)
+                    for (int i = 0; i < height.GetInt32(); i++)
                     {
-                        for (int j = 0; j < height.GetInt32(); j++)
+                        for (int j = 0; j < width.GetInt32(); j++)
                         {
-                            ints[i, j] = data[i * height.GetInt32() + j].GetInt32();
+                            ints[i, j] = data[i * width.GetInt32() + j].GetInt32(); // Corrected index calculation
                             if (ints[i, j] != 0)
                             {
                                 ints[i, j]--;
