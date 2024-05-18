@@ -1,7 +1,6 @@
 ﻿using GameEngine.src.physics.body;
 using Raylib_cs;
 using System.Numerics;
-using System.Reflection.Metadata.Ecma335;
 
 public struct Animation
 {
@@ -67,8 +66,8 @@ public struct Animation
     }
 
     // Returns if an animation is completed or not
-    //public bool Completed()
-    //{
-    //    return false;
-    //}
+    public bool Completed()
+    {
+        return GetUpdatedFrame() >= TotalFrames - 1;
+    }
 }

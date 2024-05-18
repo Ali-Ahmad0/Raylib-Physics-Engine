@@ -3,7 +3,7 @@ using System.Numerics;
 
 namespace GameEngine.src.physics.collision;
 
-internal static class CollisionDetection
+internal struct CollisionDetection
 {
     /* Collision check for AABBs */
     internal static bool AABBIntersection(AxisAlignedBoundingBox boxA, AxisAlignedBoundingBox boxB)

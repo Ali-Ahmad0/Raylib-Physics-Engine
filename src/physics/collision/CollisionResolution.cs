@@ -3,7 +3,7 @@ using GameEngine.src.physics.body;
 using System.Numerics;
 
 namespace GameEngine.src.physics.collision;
-internal static class CollisionResolution
+internal struct CollisionResolution
 {
     private static Vector2[] contactList = new Vector2[2];
     

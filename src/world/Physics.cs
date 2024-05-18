@@ -21,7 +21,7 @@ struct State
     }
 }
 
-internal class WorldPhysics
+internal struct Physics
 {
     private static object lockOject = new object();
     private static HashSet<(int, int)> contactPairs = new HashSet<(int, int)>();

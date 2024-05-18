@@ -1,4 +1,5 @@
-﻿using GameEngine.src.helper;
+﻿using GameEngine.example.scenes;
+using GameEngine.src.helper;
 using GameEngine.src.input;
 using GameEngine.src.world;
 using Raylib_cs;
@@ -8,12 +9,12 @@ namespace Game.res.scenes;
 public static class SceneTree
 {
     internal static int scene;
-    internal static World2D currentScene;
+    internal static Global currentScene;
 
     static SceneTree()
     {
-        scene = 0;
-        currentScene = new CollisionTest();
+        scene = -1;
+        currentScene = new InitialScene();
 
         Input.AssignKey("one", KeyboardKey.One);
         Input.AssignKey("two", KeyboardKey.Two);
@@ -62,11 +63,15 @@ public static class SceneTree
                 break;
 
             default:
-                if (scene > 3)
-                    scene = 0;
+                if (currentScene is not InitialScene)
+                {
+                    if (scene > 3)
+                        scene = 0;
 
-                else if (scene < 0)
-                    scene = 3;
+                    else if (scene < 0)
+                        scene = 3;
+                }
+
                 break;
         }
 

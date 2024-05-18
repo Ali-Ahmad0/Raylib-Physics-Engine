@@ -7,7 +7,7 @@ using System.Numerics;
 
 namespace GameEngine.src.world;
 
-internal class WorldCreation
+internal struct Creation
 {
     // Constraints
     private static readonly float MIN_BODY_SIZE = 0.01f * 0.01f;

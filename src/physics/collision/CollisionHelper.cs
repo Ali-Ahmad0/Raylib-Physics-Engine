@@ -4,7 +4,7 @@ using System.Numerics;
 
 namespace GameEngine.src.physics.collision;
 
-internal static class CollisionHelper
+internal struct CollisionHelper
 {
     internal static void ProjectCircle(Vector2 centerC, float radius, Vector2 axis, out float min, out float max)
     {
