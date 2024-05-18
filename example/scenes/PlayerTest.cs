@@ -75,14 +75,6 @@ internal class PlayerTest : Global
 
         // Create a camera centered at the middle of the screen
         camera = new Camera2D(Vector2.Zero, Vector2.Zero, 0, 1f);
-
-        Input.AssignKey("jump", KeyboardKey.Space);
-        Input.AssignKey("crouch", KeyboardKey.LeftControl);
-        Input.AssignKey("attack", KeyboardKey.Z);
-
-        Gamepad.AssignButton("jump", GamepadButton.RightFaceDown);
-        Gamepad.AssignButton("crouch", GamepadButton.RightFaceRight);
-        Gamepad.AssignButton("attack", GamepadButton.RightTrigger2);
     }
 
     public override void Update(double delta)

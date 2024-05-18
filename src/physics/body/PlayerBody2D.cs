@@ -27,6 +27,14 @@ public class PlayerBody2D : RigidBox2D
 
         // Initialize the player animations
         createAnimations();
+
+        Input.AssignKey("jump", KeyboardKey.Space);
+        Input.AssignKey("crouch", KeyboardKey.LeftControl);
+        Input.AssignKey("attack", KeyboardKey.Z);
+
+        Gamepad.AssignButton("jump", GamepadButton.RightFaceDown);
+        Gamepad.AssignButton("crouch", GamepadButton.RightFaceRight);
+        Gamepad.AssignButton("attack", GamepadButton.RightTrigger2);
     }
 
     public void UseDefaultPlayer(double delta)
@@ -155,9 +163,14 @@ public class PlayerBody2D : RigidBox2D
 
     private void Attack()
     {
-        if (Raylib.IsKeyPressed(KeyboardKey.Z))
-        State = PlayerStates.ATTACK;
+        if (IsOnFloor)
+        {
+            if (Input.IsKeyPressed("attack") || Gamepad.IsButtonPressed("attack"))
+                State = PlayerStates.ATTACK;
+        }
     }
+
+    static float time;
 
     private void DrawPlayer()
     {
@@ -191,6 +204,16 @@ public class PlayerBody2D : RigidBox2D
 
             case PlayerStates.ATTACK:
                 currAnimation = animations[6];
+
+                time += Raylib.GetFrameTime();
+
+                if (currAnimation.Completed() && time > 0.4)
+                { 
+                    State = PlayerStates.IDLE;
+                    time = 0;
+
+                }
+                    
                 break;
 
             default:
