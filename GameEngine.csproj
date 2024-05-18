@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="example\assets\tileset\" />
+    <Folder Include="example\assets\ui\" />
   </ItemGroup>
 
 </Project>

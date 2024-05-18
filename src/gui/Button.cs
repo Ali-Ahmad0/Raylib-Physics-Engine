@@ -101,11 +101,9 @@ public class TextureButton : Button
 
     public override void DrawButton()
     {
-        Raylib.DrawTexturePro(
-            Texture, new Rectangle(0, 0, Texture.Width, Texture.Height), 
-            new Rectangle(Rectangle.Y, Rectangle.Y, Rectangle.Width, Rectangle.Height), 
-            new Vector2(0, 0), 0, Color.White 
-        );
+        float textureX = Rectangle.X + (Rectangle.Width - Texture.Width) / 2;
+        float textureY = Rectangle.Y + (Rectangle.Height - Texture.Height) / 2;
+        Raylib.DrawTexture(Texture, (int)textureX, (int)textureY, Color.White);
     }
 }
 

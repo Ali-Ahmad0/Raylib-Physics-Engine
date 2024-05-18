@@ -139,9 +139,9 @@ public static class TileMap
         GenerateTileMapTerrain(tileMapProps.tileMap, tileMapProps.size, bodies);
     }
 
-    private static int[,] GetArrayFromJSON(string path)
+    public static int[,] GetArrayFromJSON(string path)
     {
-        String json = System.IO.File.ReadAllText(path);
+        string json = System.IO.File.ReadAllText(path);
         var obj = JsonSerializer.Deserialize<Dictionary<string, object>>(json);
 
         foreach (var item in obj)

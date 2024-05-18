@@ -23,7 +23,7 @@ public class MainMenu : Global
         center = new Vector2(Properties.ScreenWidth / 2, Properties.ScreenHeight / 2);
 
         Rectangle button0 = new Rectangle(center + new Vector2(-size.X / 2, -size.Y), size);
-        Rectangle button1 = new Rectangle(center + new Vector2(-size.X / 2, +size.Y), size);
+        Rectangle button1 = new Rectangle(center + new Vector2(-size.X / 2, +size.Y / 2), size);
 
         start = new SimpleButton(button0, Color.SkyBlue, "Start", 32);
         exit = new SimpleButton(button1, Color.Red, "Exit", 32);
