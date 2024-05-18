@@ -51,8 +51,8 @@ public struct Animation
 
         Rectangle source = Rectangles[CurrentFrame];
         Rectangle dest = new Rectangle(
-            body.Transform.Translation.X, body.Transform.Translation.Y,
-            frameSize, frameSize
+            body.Transform.Translation.X - (frameSize * ((source.Width / source.Height) - 1) / 2), body.Transform.Translation.Y,
+            frameSize * source.Width / source.Height, frameSize
             );
 
         Vector2 origin = new Vector2(frameSize / 2.75f, frameSize / 2f);

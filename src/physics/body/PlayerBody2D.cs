@@ -234,7 +234,7 @@ public class PlayerBody2D : RigidBox2D
         AddAnimation(path + "_Crouch.png", 1, 1, size);
         AddAnimation(path + "_CrouchWalk.png", 10, 8, size);
 
-        AddAnimation(path + "_Attack.png", 10, 4, new Rectangle(0, 40, 40, 40));
+        AddAnimation(path + "_Attack.png", 10, 4, new Rectangle(0, 40, 120, 40));
     }
 
     public void AddAnimation(string path, int framesPerSecond, int numberOfSprite, Rectangle spriteSize)
