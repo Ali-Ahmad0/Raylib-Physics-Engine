@@ -44,11 +44,6 @@ public struct Animation
             {
                 animationStartTime = Raylib.GetTime();
                 prevState = currentState;
-                System.Console.WriteLine("State: " + currentState);
-            }
-            if (currentState == PlayerStates.ATTACK)
-            {
-                System.Console.WriteLine(GetUpdatedFrame());
             }
 
         }
@@ -58,11 +53,6 @@ public struct Animation
         float frameSize = body.Dimensions.Height;
 
         Rectangle source = Rectangles[CurrentFrame];
-        if (test == PlayerStates.ATTACK)
-        {
-            System.Console.WriteLine("Source: " + source);
-        }
-
         Rectangle dest = new Rectangle(
             body.Transform.Translation.X - (frameSize * ((source.Width / source.Height) - 1) / 2), body.Transform.Translation.Y,
             frameSize * source.Width / source.Height, frameSize
