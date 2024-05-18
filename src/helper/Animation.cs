@@ -9,7 +9,12 @@ public struct Animation
     public int FramesPerSecond { get; private set; }
     private int CurrentFrame; 
     public List<Rectangle> Rectangles { get; private set; }
-    public int TotalFrames { get; private set; } 
+    public int TotalFrames { get; private set; }
+
+    private static double AnimationStartTime = 0;
+
+    private static PlayerStates prevState = PlayerStates.IDLE;
+
 
     public Animation(Texture2D atlas, int framesPerSecond, List<Rectangle> rectangles)
     {
@@ -22,12 +27,24 @@ public struct Animation
 
     public int GetUpdatedFrame()
     {
-        return (int)(Raylib.GetTime() * FramesPerSecond) % TotalFrames;
+        return (int)((Raylib.GetTime() - AnimationStartTime) * FramesPerSecond) % TotalFrames;
     }
 
     // Plays the animation on a body
     public void Play(PhysicsBody2D body, bool flipH = false, bool flipV = false)
     {
+        if (body is PlayerBody2D)
+        {
+            PlayerBody2D player = (PlayerBody2D)body;
+            PlayerStates currentState = player.State;
+            if (currentState != prevState)
+            {
+                AnimationStartTime = Raylib.GetTime();
+                prevState = currentState;
+                System.Console.WriteLine("State: " + currentState);
+            }
+
+        }
         CurrentFrame = GetUpdatedFrame();
 
         float frameSize = body.Dimensions.Height;
