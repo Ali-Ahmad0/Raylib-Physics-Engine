@@ -225,7 +225,7 @@ public class PlayerBody2D : RigidBox2D
 
         // Combine the executable directory with the relative path to get the full path to the assets folder
         string path = Path.GetFullPath(Path.Combine(Properties.ExecutableDirectory, relativePath)) + "/";
-        Rectangle size = new Rectangle(0, 40, 40, 40);
+        Rectangle size = new Rectangle(0, 40, 120, 40);
 
         AddAnimation(path + "_Idle.png", 10, 10, size);
         AddAnimation(path + "_Run.png", 12, 10, size);
@@ -242,7 +242,7 @@ public class PlayerBody2D : RigidBox2D
         List<Rectangle> rectangles = new List<Rectangle>();
         for (int i = 0; i < numberOfSprite; i++)
         {
-            rectangles.Add(new Rectangle(spriteSize.X + (i * 3 + 1) * spriteSize.Width, spriteSize.Y, spriteSize.Width, spriteSize.Height));
+            rectangles.Add(new Rectangle(spriteSize.X + (i) * spriteSize.Width, spriteSize.Y, spriteSize.Width, spriteSize.Height));
         }
         Animation anim = new Animation(Raylib.LoadTexture(path), framesPerSecond, rectangles);
         animations.Add(anim);

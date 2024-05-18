@@ -11,6 +11,7 @@ public struct Animation
     public int TotalFrames { get; private set; }
 
     private static double animationStartTime = 0;
+
     private static PlayerStates prevState = PlayerStates.IDLE;
     
     private static float time;
@@ -33,23 +34,35 @@ public struct Animation
     // Plays the animation on a body
     public void Play(PhysicsBody2D body, bool flipH = false, bool flipV = false)
     {
+        PlayerStates test = PlayerStates.IDLE;
         if (body is PlayerBody2D)
         {
             PlayerBody2D player = (PlayerBody2D)body;
             PlayerStates currentState = player.State;
+            test = currentState;
             if (currentState != prevState)
             {
                 animationStartTime = Raylib.GetTime();
                 prevState = currentState;
                 System.Console.WriteLine("State: " + currentState);
             }
+            if (currentState == PlayerStates.ATTACK)
+            {
+                System.Console.WriteLine(GetUpdatedFrame());
+            }
 
         }
         CurrentFrame = GetUpdatedFrame();
 
+
         float frameSize = body.Dimensions.Height;
 
         Rectangle source = Rectangles[CurrentFrame];
+        if (test == PlayerStates.ATTACK)
+        {
+            System.Console.WriteLine("Source: " + source);
+        }
+
         Rectangle dest = new Rectangle(
             body.Transform.Translation.X - (frameSize * ((source.Width / source.Height) - 1) / 2), body.Transform.Translation.Y,
             frameSize * source.Width / source.Height, frameSize
