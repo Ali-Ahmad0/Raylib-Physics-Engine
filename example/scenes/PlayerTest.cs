@@ -24,10 +24,6 @@ internal class PlayerTest : Global
         CreatePlayerBody(new Vector2(128, 512), 0, 1f, 64f, 128f, out PlayerBody2D player);
         bodies.Add(player);
 
-        int[,] testArr = TileMap.GetArrayFromJSON(Path.Combine(Properties.ExecutableDirectory, "../../../example/assets/tilemap/") + "player_test.json");
-
-        TileMap.PrintArray(testArr);
-
         // Tilemap
         tileMapProps = new TileMapProps()
         {
@@ -52,8 +48,8 @@ internal class PlayerTest : Global
 
                 },
 
-        textureMap = TileMap.GetArrayFromJSON(Path.Combine(Properties.ExecutableDirectory, "../../../example/assets/tilemap/") + "player_test.json"),
-        size = 4,
+            textureMap = TileMap.GetArrayFromJSON(Path.Combine(Properties.ExecutableDirectory, "../../../example/assets/tilemap/") + "player_test.json"),
+            size = 4,
 
             tileSet = new TileSet(Path.Combine(Properties.ExecutableDirectory, "../../../example/assets/tilemap/") + "tileset.png", new Rectangle(0, 0, 16, 16), 15, 18)
         };
