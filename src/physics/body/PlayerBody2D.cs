@@ -170,8 +170,6 @@ public class PlayerBody2D : RigidBox2D
         }
     }
 
-    static float time;
-
     private void DrawPlayer()
     {
         Animation currAnimation = animations[0];
@@ -205,13 +203,9 @@ public class PlayerBody2D : RigidBox2D
             case PlayerStates.ATTACK:
                 currAnimation = animations[6];
 
-                time += Raylib.GetFrameTime();
-
-                if (currAnimation.Completed() && time > 0.4)
-                { 
+                if (currAnimation.Completed())
+                {
                     State = PlayerStates.IDLE;
-                    time = 0;
-
                 }
                     
                 break;

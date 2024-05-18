@@ -10,9 +10,10 @@ public struct Animation
     public List<Rectangle> Rectangles { get; private set; }
     public int TotalFrames { get; private set; }
 
-    private static double AnimationStartTime = 0;
-
+    private static double animationStartTime = 0;
     private static PlayerStates prevState = PlayerStates.IDLE;
+    
+    private static float time;
 
 
     public Animation(Texture2D atlas, int framesPerSecond, List<Rectangle> rectangles)
@@ -26,7 +27,7 @@ public struct Animation
 
     public int GetUpdatedFrame()
     {
-        return (int)((Raylib.GetTime() - AnimationStartTime) * FramesPerSecond) % TotalFrames;
+        return (int)((Raylib.GetTime() - animationStartTime) * FramesPerSecond) % TotalFrames;
     }
 
     // Plays the animation on a body
@@ -38,7 +39,7 @@ public struct Animation
             PlayerStates currentState = player.State;
             if (currentState != prevState)
             {
-                AnimationStartTime = Raylib.GetTime();
+                animationStartTime = Raylib.GetTime();
                 prevState = currentState;
                 System.Console.WriteLine("State: " + currentState);
             }
@@ -68,6 +69,14 @@ public struct Animation
     // Returns if an animation is completed or not
     public bool Completed()
     {
-        return GetUpdatedFrame() >= TotalFrames - 1;
+        // Check if time for animation has completed
+        time += Raylib.GetFrameTime();
+        if (time > (float)TotalFrames / FramesPerSecond)
+        {
+            time = 0;
+            return true;
+        }
+
+        return false;
     }
 }
