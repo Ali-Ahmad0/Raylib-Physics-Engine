@@ -19,7 +19,7 @@ namespace GameEngine.example.scenes.game
             bodies = new List<PhysicsBody2D>();
 
             // Create player
-            CreatePlayerBody(new Vector2(128, 512), 0, 1f, 64f, 128f, out PlayerBody2D player);
+            CreatePlayerBody(new Vector2(150, 512), 0, 1f, 64f, 128f, out PlayerBody2D player);
             bodies.Add(player);
 
             int[,] tilemap = TileMap.GetTilemapFromJSON(Path.Combine(Properties.ExecutableDirectory, "../../../example/assets/tilemap/") + "level_1.json");
@@ -46,14 +46,21 @@ namespace GameEngine.example.scenes.game
             PlayerBody2D player = (PlayerBody2D)bodies[0];
 
             // Center the camera on the player's position
+
             camera.Target = new Vector2(player.Transform.Translation.X + player.Dimensions.Width / 2, player.Transform.Translation.Y + player.Dimensions.Height / 2);
             camera.Offset = new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight() / 2f);
 
-            player.UseDefaultPlayer(delta);
+            // Limit camera movement within the tilemap bounds
+         
+            camera.Target.X = Math.Clamp(camera.Target.X, 768, (tileMapProps.textureMap.GetLength(1) * 64) - Raylib.GetScreenWidth() / 2);
+            camera.Target.Y = Math.Clamp(camera.Target.Y, 0, (tileMapProps.textureMap.GetLength(0) * 64) - Raylib.GetScreenHeight() / 2);
 
             // Begin 2D mode with the camera
             Raylib.BeginMode2D(camera);
             Draw();
+
+            player.UseDefaultPlayer(delta);
+
             Raylib.EndMode2D();
 
             HandlePhysics(bodies, delta, camera);

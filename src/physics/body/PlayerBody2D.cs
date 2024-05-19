@@ -156,7 +156,7 @@ public class PlayerBody2D : RigidBox2D
         // Check valid condition for jump
         if (jumpBufferCounter > 0 && cayoteJumpCounter > 0)
         {
-            LinVelocity.Y = -0.35f;
+            LinVelocity.Y = -0.425f;
 
             jumpBufferCounter = 0;
             cayoteJumpCounter = 0;
