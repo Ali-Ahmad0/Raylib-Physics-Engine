@@ -75,7 +75,16 @@ public static class SceneTree
             case 5:
                 if (CurrentScene is not Level1)
                     CurrentScene = new Level1();
-                
+                break;
+
+            case 6:
+                if (CurrentScene is not Level2)
+                    CurrentScene = new Level2();
+                break;
+
+            case 7:
+                if (CurrentScene is not Level3)
+                    CurrentScene = new Level3();
                 break;
 
             default:

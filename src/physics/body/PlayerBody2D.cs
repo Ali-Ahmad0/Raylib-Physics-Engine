@@ -278,13 +278,6 @@ public class PlayerBody2D : RigidBox2D
         Animations.Add(anim);
         
     }
-    ~PlayerBody2D()
-    {
-        // Unload all textures used for animations
-        foreach (Animation anim in Animations)
-        {
-            Raylib.UnloadTexture(anim.Atlas);
-        }
-    }
+    
 }
 

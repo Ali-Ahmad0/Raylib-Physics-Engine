@@ -105,15 +105,5 @@ namespace GameEngine.example.scenes.game
             start.DrawButton();
             exit.DrawButton();
         }
-
-        ~MainMenu()
-        {
-            Raylib.UnloadTexture(background); // Unload background texture
-            Raylib.UnloadTexture(texture0);
-            Raylib.UnloadTexture(texture1);
-            Raylib.UnloadTexture(texture0pressed);
-            Raylib.UnloadTexture(texture1pressed);
-            Raylib.UnloadFont(customFont);
-        }
     }
 }

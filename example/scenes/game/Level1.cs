@@ -1,4 +1,5 @@
-﻿using GameEngine.src.main;
+﻿using Game.res.scenes;
+using GameEngine.src.main;
 using GameEngine.src.physics.body;
 using GameEngine.src.tilemap;
 using GameEngine.src.world;
@@ -19,7 +20,7 @@ namespace GameEngine.example.scenes.game
             bodies = new List<PhysicsBody2D>();
 
             // Create player
-            CreatePlayerBody(new Vector2(150, 512), 0, 1f, 64f, 128f, out PlayerBody2D player);
+            CreatePlayerBody(new Vector2(200, 512), 0, 1f, 64f, 128f, out PlayerBody2D player);
             bodies.Add(player);
 
             int[,] tilemap = TileMap.GetTilemapFromJSON(Path.Combine(Properties.ExecutableDirectory, "../../../example/assets/tilemap/") + "level_1.json");
@@ -55,15 +56,25 @@ namespace GameEngine.example.scenes.game
             camera.Target.X = Math.Clamp(camera.Target.X, 768, (tileMapProps.textureMap.GetLength(1) * 64) - Raylib.GetScreenWidth() / 2);
             camera.Target.Y = Math.Clamp(camera.Target.Y, 0, (tileMapProps.textureMap.GetLength(0) * 64) - Raylib.GetScreenHeight() / 2);
 
+            if (player.Transform.Translation.Y > 1216)
+            {
+                SceneTree.Scene = 4;
+            }
+
             // Begin 2D mode with the camera
             Raylib.BeginMode2D(camera);
             Draw();
 
             player.UseDefaultPlayer(delta);
+            
+            if (player.Transform.Translation.X > 4950)
+                SceneTree.Scene++;
 
             Raylib.EndMode2D();
 
             HandlePhysics(bodies, delta, camera);
+            
+
         }
 
         private void Draw()

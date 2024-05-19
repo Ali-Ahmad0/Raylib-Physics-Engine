@@ -28,6 +28,7 @@ public struct Animation
 
     public int GetUpdatedFrame()
     {
+
         return (int)((Raylib.GetTime() - animationStartTime) * FramesPerSecond) % TotalFrames;
     }
 
