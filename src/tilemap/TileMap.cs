@@ -8,7 +8,7 @@ namespace GameEngine.src.tilemap;
 
 public struct TileMapProps
 {
-    public int[,] tileMap;
+    public int[,] collisionMap;
     public int[,] textureMap;
     public TileSet tileSet;
     public int size;
@@ -136,39 +136,38 @@ public static class TileMap
     public static void GenerateTileMap(ref TileMapProps tileMapProps, List<PhysicsBody2D> bodies)
     {
         tileMapProps.size = (int)Math.Pow(2, tileMapProps.size + 2);
-        GenerateTileMapTerrain(tileMapProps.tileMap, tileMapProps.size, bodies);
+        GenerateTileMapTerrain(tileMapProps.collisionMap, tileMapProps.size, bodies);
     }
 
-    public static int[,] GetArrayFromJSON(string path)
+    public static int[,] GetTilemapFromJSON(string path)
     {
-        string json = System.IO.File.ReadAllText(path);
+        // Read JSON File
+        string json = File.ReadAllText(path);
         var obj = JsonSerializer.Deserialize<Dictionary<string, object>>(json);
 
-        foreach (var item in obj)
+        if (obj != null && obj.TryGetValue("layers", out var layersObj))
         {
-            if (item.Key == "layers")
+            var layers = (JsonElement)layersObj;
+            foreach (JsonElement layer in layers.EnumerateArray())
             {
-                // This json element is an array of objects
-                JsonElement layers = (JsonElement)item.Value;
-                foreach (JsonElement layer in layers.EnumerateArray())
+                // Check if all valid properties are present
+                if (layer.TryGetProperty("data", out var data) &&
+                    layer.TryGetProperty("width", out var widthElement) &&
+                    layer.TryGetProperty("height", out var heightElement))
                 {
-                    // Get the array of integers in data key
-                    JsonElement data = layer.GetProperty("data");
-                    JsonElement width = layer.GetProperty("width");
-                    JsonElement height = layer.GetProperty("height");
+                    int width = widthElement.GetInt32();
+                    int height = heightElement.GetInt32();
+                    int[,] tilemap = new int[height, width];
 
-                    // Create a 2D array of integers
-                    int[,] ints = new int[height.GetInt32(), width.GetInt32()];
-
-                    for (int i = 0; i < height.GetInt32(); i++)
+                    // Convert tilemap data into 2d integer array
+                    for (int i = 0; i < height; i++)
                     {
-                        for (int j = 0; j < width.GetInt32(); j++)
+                        for (int j = 0; j < width; j++)
                         {
-                            ints[i, j] = data[i * width.GetInt32() + j].GetInt32(); 
-                            ints[i, j]--;
+                            tilemap[i, j] = data[i * width + j].GetInt32() - 1;
                         }
                     }
-                    return ints;
+                    return tilemap;
                 }
             }
         }
@@ -176,4 +175,38 @@ public static class TileMap
         return null;
     }
 
+    public static int[,] GetCollisionFromTilemap(int[,] tilemap, int[] collisionTiles)
+    {
+        // Get the dimensions of the tilemap
+        int rows = tilemap.GetLength(0);
+        int cols = tilemap.GetLength(1);
+
+        // Create a new 2D array to store the collision map
+        int[,] collisionMap = new int[rows, cols];
+
+        // Create a HashSet from collisionTiles for efficient lookup
+        HashSet<int> collisionSet = new HashSet<int>(collisionTiles);
+
+        // Iterate through the tilemap
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < cols; j++)
+            {
+                // Check if the current tile is in the collisionSet
+                if (collisionSet.Contains(tilemap[i, j]))
+                {
+                    // If it is, set the corresponding position in collisionMap to 1
+                    collisionMap[i, j] = 1;
+                }
+                else
+                {
+                    // Otherwise, set it to 0
+                    collisionMap[i, j] = 0;
+                }
+            }
+        }
+
+        // Return the collision map
+        return collisionMap;
+    }
 }

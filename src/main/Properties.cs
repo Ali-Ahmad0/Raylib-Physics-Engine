@@ -11,6 +11,8 @@ public struct Properties
     public static bool DisplayFPS = true;
     public static bool EnableMT = false; // Added by Osman
 
+    public static bool ShouldClose = false;
+
     // Get the directory of the executable
     public static string ExecutableDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
 

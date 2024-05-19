@@ -29,7 +29,7 @@ public class TilemapTest : Global
 
         tileMapProps = new TileMapProps()
         {
-            tileMap = new int[,]
+            collisionMap = new int[,]
                 {
                     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0 },
                     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 },

@@ -34,7 +34,7 @@ internal class Process
     // Game loop
     private void Loop()
     {
-        for (; !Raylib.WindowShouldClose();)
+        for (; !(Raylib.WindowShouldClose() || Properties.ShouldClose);)
         {
             Raylib.BeginDrawing();
             Raylib.ClearBackground(new Color(15, 15, 15, 255));
