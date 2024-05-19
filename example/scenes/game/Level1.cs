@@ -44,12 +44,12 @@ namespace GameEngine.example.scenes.game
         public override void Update(double delta)
         {
             PlayerBody2D player = (PlayerBody2D)bodies[0];
-            player.UseDefaultPlayer(delta);
 
             // Center the camera on the player's position
             camera.Target = new Vector2(player.Transform.Translation.X + player.Dimensions.Width / 2, player.Transform.Translation.Y + player.Dimensions.Height / 2);
             camera.Offset = new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight() / 2f);
 
+            player.UseDefaultPlayer(delta);
 
             // Begin 2D mode with the camera
             Raylib.BeginMode2D(camera);
