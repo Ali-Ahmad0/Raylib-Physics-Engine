@@ -12,7 +12,7 @@ public struct Animation
 
     private static double animationStartTime = 0;
 
-    private static PlayerStates prevState = PlayerStates.IDLE;
+    private static string prevState = "DEFAULT";
     
     private static float time;
 
@@ -32,21 +32,14 @@ public struct Animation
     }
 
     // Plays the animation on a body
-    public void Play(PhysicsBody2D body, bool flipH = false, bool flipV = false)
+    public void Play(PhysicsBody2D body, string state, bool flipH = false, bool flipV = false)
     {
-        PlayerStates test = PlayerStates.IDLE;
-        if (body is PlayerBody2D)
+        if (state != prevState)
         {
-            PlayerBody2D player = (PlayerBody2D)body;
-            PlayerStates currentState = player.State;
-            test = currentState;
-            if (currentState != prevState)
-            {
-                animationStartTime = Raylib.GetTime();
-                prevState = currentState;
-            }
-
+            prevState = state;
+            animationStartTime = Raylib.GetTime();
         }
+
         CurrentFrame = GetUpdatedFrame();
 
         float frameSize = body.Dimensions.Height;
