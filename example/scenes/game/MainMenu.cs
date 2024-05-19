@@ -72,7 +72,7 @@ namespace GameEngine.example.scenes.game
             }
 
             if (start.IsClicked())
-                Console.WriteLine("Start!");
+                SceneTree.Scene = 5;
 
             if (exit.IsClicked())
                 Properties.ShouldClose = true;

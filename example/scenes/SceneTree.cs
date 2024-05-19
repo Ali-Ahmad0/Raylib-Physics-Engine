@@ -9,13 +9,13 @@ namespace Game.res.scenes;
 
 public static class SceneTree
 {
-    internal static int scene;
-    internal static Global currentScene;
+    internal static int Scene;
+    internal static Global CurrentScene;
 
     static SceneTree()
     {
-        scene = -1;
-        currentScene = new InitialScene();
+        Scene = -1;
+        CurrentScene = new InitialScene();
 
         Input.AssignKey("one", KeyboardKey.One);
         Input.AssignKey("two", KeyboardKey.Two);
@@ -30,62 +30,68 @@ public static class SceneTree
     public static void Update(double delta)
     {
         if (Input.IsKeyPressed("one"))
-            scene = 0;
+            Scene = 0;
         else if (Input.IsKeyPressed("two"))
-            scene = 1;
+            Scene = 1;
         else if (Input.IsKeyPressed("three"))
-            scene = 2;
+            Scene = 2;
         else if (Input.IsKeyPressed("four"))
-            scene = 3;
+            Scene = 3;
         else if (Input.IsKeyPressed("five"))
-            scene = 4;
+            Scene = 4;
 
         else if (Gamepad.IsButtonPressed("r2"))
-            scene = (scene + 1) % 5; 
+            Scene = (Scene + 1) % 5; 
         else if (Gamepad.IsButtonPressed("l2"))
-            scene = (scene - 1 + 4) % 5; 
+            Scene = (Scene - 1 + 4) % 5; 
 
-        switch (scene)
+        switch (Scene)
         {
             case 0:
-                if (currentScene is not CollisionTest)
-                    currentScene = new CollisionTest();
+                if (CurrentScene is not CollisionTest)
+                    CurrentScene = new CollisionTest();
                 break;
 
             case 1:
-                if (currentScene is not ProjectileTest)
-                    currentScene = new ProjectileTest();
+                if (CurrentScene is not ProjectileTest)
+                    CurrentScene = new ProjectileTest();
                 break;
 
             case 2:
-                if (currentScene is not TilemapTest)
-                    currentScene = new TilemapTest();
+                if (CurrentScene is not TilemapTest)
+                    CurrentScene = new TilemapTest();
                 break;
 
             case 3:
-                if (currentScene is not PlayerTest)
-                    currentScene = new PlayerTest();
+                if (CurrentScene is not PlayerTest)
+                    CurrentScene = new PlayerTest();
                 break;
 
             case 4:
-                if (currentScene is not MainMenu)
-                    currentScene = new MainMenu();
+                if (CurrentScene is not MainMenu)
+                    CurrentScene = new MainMenu();
+                break;
+
+            case 5:
+                if (CurrentScene is not Level1)
+                    CurrentScene = new Level1();
+                
                 break;
 
             default:
-                if (currentScene is not InitialScene)
+                if (CurrentScene is not InitialScene)
                 {
-                    if (scene > 4)
-                        scene = 0;
+                    if (Scene > 4)
+                        Scene = 0;
 
-                    else if (scene < 0)
-                        scene = 3;
+                    else if (Scene < 0)
+                        Scene = 3;
                 }
 
                 break;
         }
 
-        currentScene.Update(delta);
+        CurrentScene.Update(delta);
     }
   
 }
