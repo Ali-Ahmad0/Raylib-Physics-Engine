@@ -48,7 +48,7 @@ namespace GameEngine.example.scenes.game
 
             // Center the camera on the player's position
             camera.Target = new Vector2(player.Transform.Translation.X + player.Dimensions.Width / 2, player.Transform.Translation.Y + player.Dimensions.Height / 2);
-            //camera.Offset = new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight() / 2f);
+            camera.Offset = new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight() / 2f);
 
 
             // Begin 2D mode with the camera
