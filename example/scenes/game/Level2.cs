@@ -4,12 +4,7 @@ using GameEngine.src.physics.body;
 using GameEngine.src.tilemap;
 using GameEngine.src.world;
 using Raylib_cs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameEngine.example.scenes.game;
 
@@ -80,6 +75,7 @@ public class Level2 : Global
         Raylib.EndMode2D();
 
         HandlePhysics(bodies, delta, camera);
+        Raylib.DrawText("Level - 2", 64, 32, 40, Color.Red);
     }
 
     private void Draw()

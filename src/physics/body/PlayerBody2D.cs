@@ -33,7 +33,7 @@ public class PlayerBody2D : RigidBox2D
 
     private bool flipH;
 
-    private static string state = "DEFAULT";
+    private List<Animation> Animations;
 
     public PlayerBody2D(Vector2 position, float rotation, float width, float height, List<Component> components) :
         base(position, rotation, 0.985f * width * height, 0.985f, width * height, 0f, width, height, components) 
@@ -41,6 +41,8 @@ public class PlayerBody2D : RigidBox2D
         // Initialize the player
         State = PlayerStates.IDLE;
         flipH = false;
+
+        Animations = new List<Animation>();
 
         // Initialize the player animations
         CreateAnimations();
@@ -65,8 +67,6 @@ public class PlayerBody2D : RigidBox2D
 
         Attack();
         DrawPlayer();
-
-        state = State.ToString();
     }
 
     private void MovePlayer(double delta)
@@ -221,7 +221,7 @@ public class PlayerBody2D : RigidBox2D
                 else
                     currAnimation = Animations[7];
 
-                if (currAnimation.Completed())
+                if (Completed(currAnimation))
                 {
                     State = PlayerStates.IDLE;
                 }
@@ -231,7 +231,7 @@ public class PlayerBody2D : RigidBox2D
             case PlayerStates.CROUCH_ATTACK:
                 currAnimation = Animations[8];
 
-                if (currAnimation.Completed())
+                if (Completed(currAnimation))
                 {
                     State = PlayerStates.IDLE;
                 }
@@ -242,10 +242,57 @@ public class PlayerBody2D : RigidBox2D
                 break;
         }
 
-        currAnimation.Play(this, state, flipH);
+        Play(currAnimation, flipH);
     }
 
     // Animations for the default player character
+
+    private static double animationStartTime;
+    private PlayerStates prevState = PlayerStates.IDLE;
+
+    private int GetUpdatedFrame(Animation animation)
+    {
+        return (int)((Raylib.GetTime() - animationStartTime) * animation.FramesPerSecond) % animation.TotalFrames;
+    }
+
+    private void Play(Animation animation, bool flipH)
+    {
+        PlayerStates currentState = State;
+        if (currentState != prevState)
+        {
+            animationStartTime = Raylib.GetTime();
+            prevState = currentState;
+        }
+
+        animation.CurrentFrame = GetUpdatedFrame(animation);
+
+        float frameSize = Dimensions.Height;
+
+        Rectangle source = animation.Rectangles[animation.CurrentFrame];
+        Rectangle dest = new Rectangle(
+            Transform.Translation.X - (frameSize * ((source.Width / source.Height) - 1) / 2), Transform.Translation.Y,
+            frameSize * source.Width / source.Height, frameSize
+            );
+
+        Vector2 origin = new Vector2(frameSize / 2.75f, frameSize / 2f);
+
+        if (flipH)
+        {
+            source.Width *= -1;
+            origin.X = Dimensions.Height - origin.X; // Adjusting the origin when flipped horizontally
+        }
+
+        Raylib.DrawTexturePro(animation.Atlas, source, dest, origin, 0, Color.White);
+    }
+
+    private bool Completed(Animation animation) 
+    {
+        if (GetUpdatedFrame(animation) >= animation.TotalFrames - 1)
+            return true;
+
+        return false;
+    }
+
     private void CreateAnimations()
     {
         // Construct the relative path from the executable's directory to the assets folder
@@ -278,6 +325,23 @@ public class PlayerBody2D : RigidBox2D
         Animations.Add(anim);
         
     }
-    
+}
+
+internal struct Animation
+{
+    internal Texture2D Atlas { get; private set; }
+    internal int FramesPerSecond { get; private set; }
+    internal int CurrentFrame;
+    internal List<Rectangle> Rectangles { get; private set; }
+    internal int TotalFrames { get; private set; }
+
+    public Animation(Texture2D atlas, int framesPerSecond, List<Rectangle> rectangles)
+    {
+        Atlas = atlas;
+        FramesPerSecond = framesPerSecond;
+        Rectangles = rectangles;
+        TotalFrames = rectangles.Count; // Calculate and store the total number of frames
+        CurrentFrame = 0;
+    }
 }
 

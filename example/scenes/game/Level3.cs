@@ -76,6 +76,7 @@ public class Level3 : Global
         Raylib.EndMode2D();
 
         HandlePhysics(bodies, delta, camera);
+        Raylib.DrawText("Level - 3", 64, 32, 40, Color.Red);
     }
 
     private void Draw()

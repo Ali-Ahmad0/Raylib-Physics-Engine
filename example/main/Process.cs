@@ -12,7 +12,7 @@ internal class Process
     private float fpsPositionX;
     private float fpsPositionY;
 
-    internal void Start()
+    internal Process()
     {
         Init(); // Initialize the program
         Loop(); // Process loop

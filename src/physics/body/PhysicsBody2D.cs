@@ -29,8 +29,6 @@ public abstract class PhysicsBody2D
     protected bool VerticesUpdateRequired;
     protected bool AABBUpdateRequired;
 
-    public List<Animation> Animations { get; private set; }
-
     // Current collision state
     public bool IsOnFloor { get; internal set; }
     public bool IsOnCeiling { get; internal set; }
@@ -52,7 +50,6 @@ public abstract class PhysicsBody2D
     {
         // Initialize physical properties
         Transform = new Transform2D(position, rotation);
-        Animations = new List<Animation>();
 
         HandleCollision = true;
         ApplyGravity = true;

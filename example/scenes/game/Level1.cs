@@ -73,8 +73,8 @@ namespace GameEngine.example.scenes.game
             Raylib.EndMode2D();
 
             HandlePhysics(bodies, delta, camera);
-            
 
+            Raylib.DrawText("Level - 1", 64, 32, 40, Color.Red);
         }
 
         private void Draw()
