@@ -8,7 +8,7 @@ using System.Numerics;
 
 namespace GameEngine.example.scenes.game;
 
-public class Level2 : Global
+public class Level2 : RootScene
 {
     private TileMapProps tileMapProps;
     private List<PhysicsBody2D> bodies;

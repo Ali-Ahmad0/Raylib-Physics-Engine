@@ -7,7 +7,7 @@ using GameEngine.src.helper;
 
 namespace Game.res.scenes;
 
-public class CollisionTest : Global
+public class CollisionTest : RootScene
 {
     // Member variables
     private List<PhysicsBody2D> bodies;

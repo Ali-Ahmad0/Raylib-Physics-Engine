@@ -4,7 +4,7 @@ using Raylib_cs;
 
 namespace GameEngine.example.scenes;
 
-public class InitialScene : Global
+public class InitialScene : RootScene
 {
     string heading;
     string subheading;

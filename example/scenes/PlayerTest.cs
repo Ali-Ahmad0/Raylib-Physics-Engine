@@ -7,7 +7,7 @@ using GameEngine.src.main;
 
 namespace Game.res.scenes;
 
-internal class PlayerTest : Global
+internal class PlayerTest : RootScene
     {
     private TileMapProps tileMapProps;
     private List<PhysicsBody2D> bodies;
