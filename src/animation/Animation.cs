@@ -45,7 +45,6 @@ public struct Animation
                 animationStartTime = Raylib.GetTime();
                 prevState = currentState;
             }
-
         }
         CurrentFrame = GetUpdatedFrame();
 
