@@ -4,11 +4,10 @@ using System.Numerics;
 using GameEngine.src.input;
 using GameEngine.src.helper;
 using GameEngine.src.main;
-using System.Reflection.Metadata;
 
 namespace GameEngine.src.physics.body;
 
-public enum PlayerStates
+internal enum PlayerStates
 {
     IDLE, WALK, JUMP, FALL, CROUCH_IDLE, CROUCH_WALK, ATTACK, CROUCH_ATTACK, DIE
 }
@@ -17,17 +16,36 @@ public class PlayerBody2D : RigidBox2D
 {
     internal PlayerStates State { get; set; }
 
-    private List<Animation> animations;
+    // Default Player Motion logic (optional)
+    private float maxSpeed = 5000;
+    private float acceleration = 500;
+
+    private float landDeceleration = 750;
+    private float airDeceleration = 300;
+
+    private const int JUMP_BUFFER_TIME = 15;
+    private const int CAYOTE_JUMP_TIME = 10;
+
+    private int jumpBufferCounter = 0;
+    private int cayoteJumpCounter = 0;
+
+    private int attackCounter = 0;
+
+    private bool flipH;
+
+    private List<Animation> Animations;
+
     public PlayerBody2D(Vector2 position, float rotation, float width, float height, List<Component> components) :
         base(position, rotation, 0.985f * width * height, 0.985f, width * height, 0f, width, height, components) 
     {
         // Initialize the player
         State = PlayerStates.IDLE;
-        animations = new List<Animation>();
         flipH = false;
 
+        Animations = new List<Animation>();
+
         // Initialize the player animations
-        createAnimations();
+        CreateAnimations();
 
         Input.AssignKey("jump", KeyboardKey.Space);
         Input.AssignKey("crouch", KeyboardKey.LeftControl);
@@ -48,26 +66,8 @@ public class PlayerBody2D : RigidBox2D
         }
 
         Attack();
-
         DrawPlayer();
     }
-
-    // Default Player Motion logic (optional)
-    private float maxSpeed = 5000;
-    private float acceleration = 500;
-
-    private float landDeceleration = 750;
-    private float airDeceleration  = 300;
-
-    private const int JUMP_BUFFER_TIME = 15;
-    private const int CAYOTE_JUMP_TIME = 10;
-
-    private int jumpBufferCounter = 0;
-    private int cayoteJumpCounter = 0;
-
-    private int attackCounter = 0;
-
-    private bool flipH;
 
     private void MovePlayer(double delta)
     {
@@ -156,7 +156,7 @@ public class PlayerBody2D : RigidBox2D
         // Check valid condition for jump
         if (jumpBufferCounter > 0 && cayoteJumpCounter > 0)
         {
-            LinVelocity.Y = -0.35f;
+            LinVelocity.Y = -0.425f;
 
             jumpBufferCounter = 0;
             cayoteJumpCounter = 0;
@@ -166,7 +166,7 @@ public class PlayerBody2D : RigidBox2D
 
     private void Attack()
     {
-        if (IsOnFloor)
+        if (IsOnFloor && !(State == PlayerStates.ATTACK || State == PlayerStates.CROUCH_ATTACK))
         {
             if (Input.IsKeyPressed("attack") || Gamepad.IsButtonPressed("attack"))
             {
@@ -186,42 +186,42 @@ public class PlayerBody2D : RigidBox2D
 
     private void DrawPlayer()
     {
-        Animation currAnimation = animations[0];
+        Animation currAnimation = Animations[0];
 
         switch (State)
         {
             case PlayerStates.IDLE:
-                currAnimation = animations[0];
+                currAnimation = Animations[0];
                 break;
 
             case PlayerStates.WALK:
-                currAnimation = animations[1];
+                currAnimation = Animations[1];
                 break;
 
             case PlayerStates.JUMP:
-                currAnimation = animations[2];
+                currAnimation = Animations[2];
                 break;
 
             case PlayerStates.FALL:
-                currAnimation = animations[3];
+                currAnimation = Animations[3];
                 break;
 
             case PlayerStates.CROUCH_IDLE:
-                currAnimation = animations[4];
+                currAnimation = Animations[4];
                 break;
 
             case PlayerStates.CROUCH_WALK:
-                currAnimation = animations[5];
+                currAnimation = Animations[5];
                 break;
 
             case PlayerStates.ATTACK:
                 if (attackCounter == 1)
-                    currAnimation = animations[6];
+                    currAnimation = Animations[6];
 
                 else
-                    currAnimation = animations[7];
+                    currAnimation = Animations[7];
 
-                if (currAnimation.Completed())
+                if (Completed(currAnimation))
                 {
                     State = PlayerStates.IDLE;
                 }
@@ -229,9 +229,9 @@ public class PlayerBody2D : RigidBox2D
                 break;
 
             case PlayerStates.CROUCH_ATTACK:
-                currAnimation = animations[8];
+                currAnimation = Animations[8];
 
-                if (currAnimation.Completed())
+                if (Completed(currAnimation))
                 {
                     State = PlayerStates.IDLE;
                 }
@@ -242,11 +242,58 @@ public class PlayerBody2D : RigidBox2D
                 break;
         }
 
-        currAnimation.Play(this, flipH);
+        Play(currAnimation, flipH);
     }
 
     // Animations for the default player character
-    private void createAnimations()
+
+    private static double animationStartTime;
+    private PlayerStates prevState = PlayerStates.IDLE;
+
+    private int GetUpdatedFrame(Animation animation)
+    {
+        return (int)((Raylib.GetTime() - animationStartTime) * animation.FramesPerSecond) % animation.TotalFrames;
+    }
+
+    private void Play(Animation animation, bool flipH)
+    {
+        PlayerStates currentState = State;
+        if (currentState != prevState)
+        {
+            animationStartTime = Raylib.GetTime();
+            prevState = currentState;
+        }
+
+        animation.CurrentFrame = GetUpdatedFrame(animation);
+
+        float frameSize = Dimensions.Height;
+
+        Rectangle source = animation.Rectangles[animation.CurrentFrame];
+        Rectangle dest = new Rectangle(
+            Transform.Translation.X - (frameSize * ((source.Width / source.Height) - 1) / 2), Transform.Translation.Y,
+            frameSize * source.Width / source.Height, frameSize
+            );
+
+        Vector2 origin = new Vector2(frameSize / 2.75f, frameSize / 2f);
+
+        if (flipH)
+        {
+            source.Width *= -1;
+            origin.X = Dimensions.Height - origin.X; // Adjusting the origin when flipped horizontally
+        }
+
+        Raylib.DrawTexturePro(animation.Atlas, source, dest, origin, 0, Color.White);
+    }
+
+    private bool Completed(Animation animation) 
+    {
+        if (GetUpdatedFrame(animation) >= animation.TotalFrames - 1)
+            return true;
+
+        return false;
+    }
+
+    private void CreateAnimations()
     {
         // Construct the relative path from the executable's directory to the assets folder
         string relativePath = "../../../example/assets/player";
@@ -275,16 +322,26 @@ public class PlayerBody2D : RigidBox2D
             rectangles.Add(new Rectangle(spriteSize.X + (i) * spriteSize.Width, spriteSize.Y, spriteSize.Width, spriteSize.Height));
         }
         Animation anim = new Animation(Raylib.LoadTexture(path), framesPerSecond, rectangles);
-        animations.Add(anim);
+        Animations.Add(anim);
         
     }
-    ~PlayerBody2D()
+}
+
+internal struct Animation
+{
+    internal Texture2D Atlas { get; private set; }
+    internal int FramesPerSecond { get; private set; }
+    internal int CurrentFrame;
+    internal List<Rectangle> Rectangles { get; private set; }
+    internal int TotalFrames { get; private set; }
+
+    public Animation(Texture2D atlas, int framesPerSecond, List<Rectangle> rectangles)
     {
-        // Unload all textures used for animations
-        foreach (Animation anim in animations)
-        {
-            Raylib.UnloadTexture(anim.Atlas);
-        }
+        Atlas = atlas;
+        FramesPerSecond = framesPerSecond;
+        Rectangles = rectangles;
+        TotalFrames = rectangles.Count; // Calculate and store the total number of frames
+        CurrentFrame = 0;
     }
 }
 

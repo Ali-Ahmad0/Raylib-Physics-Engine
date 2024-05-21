@@ -14,7 +14,7 @@ public struct TileMapProps
     public int size;
 }
 
-public struct TileSet
+public class TileSet
 {
     public Texture2D texture;
     public Rectangle rect;
@@ -31,7 +31,7 @@ public struct TileSet
 
     public TileSet(string path, Rectangle rect, int columns, int rows)
     {
-        this.texture = Raylib.LoadTexture(path);
+        texture = Raylib.LoadTexture(path);
         this.rect = rect;
         this.columns = columns;
         this.rows = rows;
@@ -139,7 +139,7 @@ public static class TileMap
         GenerateTileMapTerrain(tileMapProps.collisionMap, tileMapProps.size, bodies);
     }
 
-    public static int[,] GetTilemapFromJSON(string path)
+    public static int[,]? GetTilemapFromJSON(string path)
     {
         // Read JSON File
         string json = File.ReadAllText(path);

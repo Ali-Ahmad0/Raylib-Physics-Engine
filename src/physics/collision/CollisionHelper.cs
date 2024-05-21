@@ -60,8 +60,8 @@ internal struct CollisionHelper
     internal static void ProjectVertices(Vector2[] vertices, Vector2 axis, out float min, out float max)
     {
         // Minimum and maximum projection
-        min = float.MaxValue;
-        max = float.MinValue;
+        min = float.PositiveInfinity;
+        max = float.NegativeInfinity;
 
         // Get perpendicular projection of every vertex onto axis using dot product
         foreach (Vector2 vertex in vertices)
