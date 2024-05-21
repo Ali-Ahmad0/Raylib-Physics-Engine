@@ -6,6 +6,7 @@ using GameEngine.src.gui;
 using GameEngine.src.main;
 using GameEngine.src.world;
 using Game.res.scenes;
+using GameEngine.src.helper;
 
 namespace GameEngine.example.scenes.game
 {
@@ -53,6 +54,8 @@ namespace GameEngine.example.scenes.game
 
             // Load the custom font
             customFont = Raylib.LoadFont(Path.Combine(Properties.ExecutableDirectory, "../../../example/assets/font/editundo.ttf"));
+
+            Raylib.HideCursor();
         }
 
         public override void Update(double delta)
@@ -82,6 +85,17 @@ namespace GameEngine.example.scenes.game
 
         private void Draw()
         {
+            // Set cursor position (works with controller)
+            Vector2 cursorPos = Mouse.GetPos();
+            Vector2 leftAxis = Gamepad.GetLeftAxis();
+
+            if (leftAxis.LengthSquared() > 0.025)
+            {
+                cursorPos += leftAxis * 10;
+            }
+
+            Mouse.SetPos(cursorPos);
+
             // Draw background image first to cover the entire screen
             Raylib.DrawTextureEx(background, new Vector2(0, 0), 0, 
                 Math.Max((float)Properties.ScreenWidth / background.Width, (float)Properties.ScreenHeight / background.Height), Color.White
@@ -104,6 +118,8 @@ namespace GameEngine.example.scenes.game
 
             start.DrawButton();
             exit.DrawButton();
+
+            Raylib.DrawText("< >", (int)cursorPos.X, (int)cursorPos.Y, 32, Color.Green);
         }
     }
 }

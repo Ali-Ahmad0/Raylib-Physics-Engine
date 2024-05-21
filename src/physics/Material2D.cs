@@ -1,5 +1,4 @@
-﻿
-namespace GameEngine.src.physics;
+﻿namespace GameEngine.src.physics;
 public class Material2D
 {
     // Physicsal attributes for a rigidbody object

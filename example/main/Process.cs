@@ -1,5 +1,6 @@
 ﻿using Game.res.scenes;
 using GameEngine.src.main;
+using GameEngine.src.physics.collision;
 using Raylib_cs;
 
 namespace Game.main;
@@ -14,10 +15,13 @@ internal class Process
 
     internal Process()
     {
+        Raylib.InitAudioDevice();
+
         Init(); // Initialize the program
         Loop(); // Process loop
 
         // Stop at the end of loop
+        Raylib.CloseAudioDevice();
         Stop();
     }
 

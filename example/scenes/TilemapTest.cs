@@ -19,10 +19,9 @@ public class TilemapTest : Global
         bodies = new List<PhysicsBody2D>();
 
         colors = new List<Color>() {
-            Color.White,
+            Color.SkyBlue,
             Color.Red,
             Color.Green,
-            Color.Blue,
             Color.Gold
         };
 
@@ -31,8 +30,8 @@ public class TilemapTest : Global
         {
             collisionMap = new int[,]
                 {
-                    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0 },
-                    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 },
+                    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -73,7 +72,7 @@ public class TilemapTest : Global
     {
         for (int i = 0; i < bodies.Count; i++)
         {
-            DrawCollisionShapes(bodies[i], colors[i % 5]);
+            DrawCollisionShapes(bodies[i], colors[i % 4]);
         }
     }
 

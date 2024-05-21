@@ -139,7 +139,7 @@ public static class TileMap
         GenerateTileMapTerrain(tileMapProps.collisionMap, tileMapProps.size, bodies);
     }
 
-    public static int[,] GetTilemapFromJSON(string path)
+    public static int[,]? GetTilemapFromJSON(string path)
     {
         // Read JSON File
         string json = File.ReadAllText(path);

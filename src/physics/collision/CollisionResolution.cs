@@ -25,11 +25,13 @@ internal struct CollisionResolution
 
         float restitution = MathF.Min(bodyA.Material.Restitution, bodyB.Material.Restitution);
 
+        // Calculate impulse
         float j = -(1f + restitution) * Vector2.Dot(relativeVelocity, normal);
         j /= (1f / bodyA.Material.Mass + 1f / bodyB.Material.Mass);
 
         Vector2 impulse = j * normal;
 
+        // Linear acceleration
         bodyA.LinVelocity -= impulse / bodyA.Material.Mass;
         bodyB.LinVelocity += impulse / bodyB.Material.Mass;
     }
