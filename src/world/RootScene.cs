@@ -6,7 +6,6 @@ namespace GameEngine.src.world;
 public abstract class RootScene
 {
     protected static void DrawCollisionShapes(PhysicsBody2D body, Color color) => WorldCreation.DrawCollisionShapes(body, color);
-    protected static void DrawBodySprite(PhysicsBody2D body, Texture2D sprite) => WorldCreation.DrawBodySprite(body, sprite);
     protected static void CreateRigidBody(Vector2 position, Vector2 scale, float density, float restitution,
         float radius, out RigidBody2D body2D) => WorldCreation.CreateRigidBody(position, scale, density, restitution, radius, out body2D);
 

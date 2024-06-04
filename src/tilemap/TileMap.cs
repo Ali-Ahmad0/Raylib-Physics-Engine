@@ -6,6 +6,8 @@ using System.Text.Json;
 
 namespace GameEngine.src.tilemap;
 
+#pragma warning disable CS8603 // Possible null reference return.
+
 public struct TileMapProps
 {
     public int[,] collisionMap;
@@ -39,7 +41,7 @@ public class TileSet
 }
 
 
-public static class TileMap
+public struct TileMap
 {
     public static void GenerateTileMapTerrain(int[,] grid, int size, List<PhysicsBody2D> bodies)
     {
@@ -139,7 +141,7 @@ public static class TileMap
         GenerateTileMapTerrain(tileMapProps.collisionMap, tileMapProps.size, bodies);
     }
 
-    public static int[,]? GetTilemapFromJSON(string path)
+    public static int[,] GetTilemapFromJSON(string path)
     {
         // Read JSON File
         string json = File.ReadAllText(path);

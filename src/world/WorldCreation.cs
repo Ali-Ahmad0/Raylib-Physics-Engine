@@ -54,11 +54,6 @@ internal struct WorldCreation
         }
     }
 
-    internal static void DrawBodySprite(PhysicsBody2D body, Texture2D sprite)
-    {
-
-    }
-
     // Creates a Circle RigidBody
     internal static void CreateRigidBody(Vector2 position, Vector2 scale, float density, float restitution,
         float radius, out RigidBody2D body2D)
