@@ -155,7 +155,8 @@ public struct TileMap
         GenerateTileMapTerrain(tileMapProps.collisionMap, tileMapProps.size, bodies);
     }
 
-    public static int[,]? GetTilemapFromJSON(string path)
+    // Convert JSON tilemap into 2D int array
+    public static int[,] GetTilemapFromJSON(string path)
     {
         // Read JSON File
         string json = File.ReadAllText(path);

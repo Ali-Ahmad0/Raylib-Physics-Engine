@@ -17,6 +17,7 @@ namespace Game.res.scenes
             Scene = -1;
             CurrentScene = new InitialScene();
 
+            // Initial key assigning 
             Input.AssignKey("one", KeyboardKey.One);
             Input.AssignKey("two", KeyboardKey.Two);
             Input.AssignKey("three", KeyboardKey.Three);
@@ -29,6 +30,7 @@ namespace Game.res.scenes
 
         public static void Update(double delta)
         {
+            // Scene switching
             if (Input.IsKeyPressed("one")) Scene = 0;
             else if (Input.IsKeyPressed("two")) Scene = 1;
             else if (Input.IsKeyPressed("three")) Scene = 2;

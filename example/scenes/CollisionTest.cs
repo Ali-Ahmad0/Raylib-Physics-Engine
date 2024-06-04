@@ -87,7 +87,7 @@ public class CollisionTest : RootScene
         // Scene title
         Raylib.DrawText("Collision Test", 20, 20, 32, Color.Green);
 
-        // Random
+        // Random scaling
         Random random = new Random();
         float xBox = (float)(random.NextDouble() * (1.3 - 0.9) + 0.9);
         float yBox = (float)(random.NextDouble() * (1.3 - 0.9) + 0.9);

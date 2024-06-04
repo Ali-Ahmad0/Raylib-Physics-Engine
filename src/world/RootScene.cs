@@ -3,6 +3,8 @@ using System.Numerics;
 using GameEngine.src.physics.body;
 
 namespace GameEngine.src.world;
+
+// All scenes extend RootScene
 public abstract class RootScene
 {
     protected static void DrawCollisionShapes(PhysicsBody2D body, Color color) => WorldCreation.DrawCollisionShapes(body, color);

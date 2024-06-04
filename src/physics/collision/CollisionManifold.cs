@@ -3,6 +3,7 @@ using System.Numerics;
 
 namespace GameEngine.src.physics.collision;
 
+// Information about colliding bodies
 internal readonly struct CollisionManifold
 {
     // 2 colliding bodies

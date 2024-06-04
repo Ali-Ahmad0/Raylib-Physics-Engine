@@ -9,7 +9,7 @@ public struct Properties
     public static string Title = "Game Engine";
 
     public static bool DisplayFPS = true;
-    public static bool EnableMT = false; // Added by Osman
+    public static bool EnableMT = false; 
 
     public static bool ShouldClose = false;
 

@@ -12,6 +12,8 @@ internal struct CollisionDetection
 
     }
 
+    // Collision checks using Seperating Axis Theorem
+
     /* Collision check for Circles and Polygons */
     private static bool CircPolyCollision(PhysicsBody2D bodyA, PhysicsBody2D bodyB, out Vector2 normal, out float depth)
     {

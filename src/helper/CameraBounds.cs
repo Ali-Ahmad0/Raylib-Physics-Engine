@@ -10,7 +10,7 @@ public struct CameraBounds
     public Vector2 Max { get; private set; }
     public void Calculate(Camera2D camera)
     {
-        // Assuming Properties.ScreenWidth and Properties.ScreenHeight are the dimensions of your screen
+        // Properties.ScreenWidth and Properties.ScreenHeight are the dimensions of screen
         float halfScreenWidth = Properties.ScreenWidth / 2;
         float halfScreenHeight = Properties.ScreenHeight / 2;
 
