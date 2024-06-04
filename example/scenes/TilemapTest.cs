@@ -6,7 +6,7 @@ using System.Numerics;
 
 namespace Game.res.scenes;
 
-public class TilemapTest : Global
+public class TilemapTest : RootScene
 {
     private TileMapProps tileMapProps;
     private List<PhysicsBody2D> bodies;

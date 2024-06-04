@@ -10,7 +10,7 @@ using GameEngine.src.helper;
 
 namespace GameEngine.example.scenes.game
 {
-    public class MainMenu : Global
+    public class MainMenu : RootScene
     {
         string title;
         TextureButton start;

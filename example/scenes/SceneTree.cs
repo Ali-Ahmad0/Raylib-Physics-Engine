@@ -10,7 +10,7 @@ namespace Game.res.scenes
     public static class SceneTree
     {
         internal static int Scene;
-        internal static Global CurrentScene;
+        internal static RootScene CurrentScene;
 
         static SceneTree()
         {
@@ -37,7 +37,7 @@ namespace Game.res.scenes
             else if (Gamepad.IsButtonPressed("r2")) Scene = (Scene + 1) % 5;
             else if (Gamepad.IsButtonPressed("l2")) Scene = (Scene - 1 + 5) % 5;
 
-            Global newScene = Scene switch
+            RootScene newScene = Scene switch
             {
                 0 => CurrentScene is not CollisionTest ? new CollisionTest() : CurrentScene,
                 1 => CurrentScene is not ProjectileTest ? new ProjectileTest() : CurrentScene,
