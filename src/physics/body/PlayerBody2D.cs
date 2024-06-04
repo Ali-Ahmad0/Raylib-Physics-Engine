@@ -186,6 +186,7 @@ public class PlayerBody2D : RigidBox2D
 
     private void DrawPlayer()
     {
+        // Draw the player based on the current state
         Animation currAnimation = Animations[0];
 
         switch (State)
@@ -255,6 +256,7 @@ public class PlayerBody2D : RigidBox2D
         return (int)((Raylib.GetTime() - animationStartTime) * animation.FramesPerSecond) % animation.TotalFrames;
     }
 
+    // Play the animation
     private void Play(Animation animation, bool flipH)
     {
         PlayerStates currentState = State;
@@ -316,6 +318,7 @@ public class PlayerBody2D : RigidBox2D
 
     public void AddAnimation(string path, int framesPerSecond, int numberOfSprite, Rectangle spriteSize)
     {
+        // Create a list of rectangles to store the sprite sheet
         List<Rectangle> rectangles = new List<Rectangle>();
         for (int i = 0; i < numberOfSprite; i++)
         {
