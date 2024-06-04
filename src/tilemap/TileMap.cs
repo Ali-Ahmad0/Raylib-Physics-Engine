@@ -8,21 +8,22 @@ namespace GameEngine.src.tilemap;
 
 public struct TileMapProps
 {
-    public int[,] collisionMap;
-    public int[,] textureMap;
-    public TileSet tileSet;
-    public int size;
+    public int[,] collisionMap; // 2D array representing the collision map
+    public int[,] textureMap; // 2D array representing the texture map
+    public TileSet tileSet; // TileSet object containing information about the tileset
+    public int size; // Size of the tiles
 }
 
 public class TileSet
 {
-    public Texture2D texture;
-    public Rectangle rect;
-    public int columns;
-    public int rows;
+    public Texture2D texture; // Texture of the tileset
+    public Rectangle rect; // Rectangle representing the area of a single tile in the tileset
+    public int columns; // Number of columns in the tileset
+    public int rows; // Number of rows in the tileset
 
     public TileSet(Texture2D texture, Rectangle rect, int columns, int rows)
     {
+        // Make a new tileset with the given parameters
         this.texture = texture;
         this.rect = rect;
         this.columns = columns;
@@ -31,6 +32,7 @@ public class TileSet
 
     public TileSet(string path, Rectangle rect, int columns, int rows)
     {
+        // Make a new tileset with a given path
         texture = Raylib.LoadTexture(path);
         this.rect = rect;
         this.columns = columns;
@@ -49,15 +51,20 @@ public static class TileMap
         // Create the bodies
         AddBodies(boxes, bodies, size);
     }
+
+    // Find all the boxes in the grid
     public static List<Rectangle> FindBoxes(int[,] grid)
     {
+        // Get the dimensions of the grid
         int rows = grid.GetLength(0);
         int cols = grid.GetLength(1);
 
+        // Create a list to store the boxes
         List<Rectangle> boxes = new List<Rectangle>();
 
         for (int i = 0; i < rows; i++)
         {
+            // Iterate through the rows and find the horizontal boxes
             int start, end;
             for (int j = 0; j < cols; j++)
             {
@@ -74,11 +81,33 @@ public static class TileMap
                 }
             }
         }
+        // Merge vertically adjacent boxes
         MergeVerticalBoxes(boxes);
         return boxes;
     }
 
+    // Merge vertically adjacent boxes
+    private static void MergeVerticalBoxes(List<Rectangle> boxes)
+    {
+        for (int i = 0; i < boxes.Count; i++)
+        {
+            // Loop through the boxes and merge the vertically adjacent ones
+            for (int j = i + 1; j < boxes.Count; j++)
+            {
+                if (boxes[i].X == boxes[j].X && boxes[i].Width == boxes[j].Width)
+                {
+                    if (boxes[i].Y + boxes[i].Height == boxes[j].Y)
+                    {
+                        // Merge the boxes and remove the second one
+                        boxes[i] = new Rectangle(boxes[i].X, boxes[i].Y, boxes[i].Width, boxes[i].Height + boxes[j].Height);
+                        boxes.RemoveAt(j);
+                    }
+                }
+            }
+        }
+    }
 
+    // Create physics bodies for the boxes
     public static void AddBodies(List<Rectangle> boxes, List<PhysicsBody2D> bodies, int size)
     {
         // Iterate through the edges and create the bodies
@@ -93,24 +122,7 @@ public static class TileMap
         }
     }
 
-    private static void MergeVerticalBoxes(List<Rectangle> boxes)
-    {
-        for (int i = 0; i < boxes.Count; i++)
-        {
-            for (int j = i + 1; j < boxes.Count; j++)
-            {
-                if (boxes[i].X == boxes[j].X && boxes[i].Width == boxes[j].Width)
-                {
-                    if (boxes[i].Y + boxes[i].Height == boxes[j].Y)
-                    {
-                        boxes[i] = new Rectangle(boxes[i].X, boxes[i].Y, boxes[i].Width, boxes[i].Height + boxes[j].Height);
-                        boxes.RemoveAt(j);
-                    }
-                }
-            }
-        }
-    }
-
+    // Draw the background using the tileset and texture map
     public static void DrawBackground(TileSet tileSet, int[,] textureMap, int size)
     {
         for (int i = 0; i < textureMap.GetLength(0); i++)
@@ -119,6 +131,7 @@ public static class TileMap
             {
                 if (textureMap[i, j] >= 0)
                 {
+                    // Iterate through the texture map and draw the tiles
                     Rectangle source = new Rectangle((textureMap[i, j] % tileSet.columns * tileSet.rect.Width) + tileSet.rect.X, (textureMap[i, j] / tileSet.columns % tileSet.rows * tileSet.rect.Height) + tileSet.rect.Y, tileSet.rect.Width, tileSet.rect.Height);
                     Rectangle dest = new Rectangle(j * size, i * size, size, size);
                     Raylib.DrawTexturePro(tileSet.texture, source, dest, new Vector2(0, 0), 0, Color.White);
@@ -127,18 +140,20 @@ public static class TileMap
         }
     }
 
+    // Draw the background using the tilemap properties
     public static void DrawBackground(TileMapProps tileMapProps)
     {
         DrawBackground(tileMapProps.tileSet, tileMapProps.textureMap, tileMapProps.size);
     }
 
-    // Make a method that takes in both tilemap and background and draws the tilemap
+    // Generate the tilemap terrain
     public static void GenerateTileMap(ref TileMapProps tileMapProps, List<PhysicsBody2D> bodies)
     {
         tileMapProps.size = (int)Math.Pow(2, tileMapProps.size + 2);
         GenerateTileMapTerrain(tileMapProps.collisionMap, tileMapProps.size, bodies);
     }
 
+    // Get the tilemap from a JSON file
     public static int[,]? GetTilemapFromJSON(string path)
     {
         // Read JSON File
@@ -175,6 +190,7 @@ public static class TileMap
         return null;
     }
 
+    // Get the collision map from the tilemap
     public static int[,] GetCollisionFromTilemap(int[,] tilemap, int[] collisionTiles)
     {
         // Get the dimensions of the tilemap

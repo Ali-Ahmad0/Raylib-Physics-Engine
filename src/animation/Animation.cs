@@ -4,18 +4,17 @@ using System.Numerics;
 
 public struct Animation
 {
-    public Texture2D Atlas { get; private set; }
-    public int FramesPerSecond { get; private set; }
-    private int CurrentFrame; 
-    public List<Rectangle> Rectangles { get; private set; }
-    public int TotalFrames { get; private set; }
+    public Texture2D Atlas { get; private set; } // The texture atlas containing the animation frames
+    public int FramesPerSecond { get; private set; } // The number of frames to display per second
+    private int CurrentFrame; // The index of the current frame being displayed
+    public List<Rectangle> Rectangles { get; private set; } // The list of rectangles representing each frame in the atlas
+    public int TotalFrames { get; private set; } // The total number of frames in the animation
 
-    private static double animationStartTime = 0;
+    private static double animationStartTime = 0; // The start time of the animation
 
-    private static PlayerStates prevState = PlayerStates.IDLE;
-    
-    private static float time;
+    private static PlayerStates prevState = PlayerStates.IDLE; // The previous state of the player
 
+    private static float time; // The elapsed time since the animation started
 
     public Animation(Texture2D atlas, int framesPerSecond, List<Rectangle> rectangles)
     {
@@ -28,7 +27,7 @@ public struct Animation
 
     public int GetUpdatedFrame()
     {
-        return (int)((Raylib.GetTime() - animationStartTime) * FramesPerSecond) % TotalFrames;
+        return (int)((Raylib.GetTime() - animationStartTime) * FramesPerSecond) % TotalFrames; // Calculate the current frame based on the elapsed time
     }
 
     // Plays the animation on a body
@@ -42,42 +41,43 @@ public struct Animation
             test = currentState;
             if (currentState != prevState)
             {
-                animationStartTime = Raylib.GetTime();
+                animationStartTime = Raylib.GetTime(); // Reset the animation start time when the player state changes
                 prevState = currentState;
             }
         }
-        CurrentFrame = GetUpdatedFrame();
+        CurrentFrame = GetUpdatedFrame(); // Update the current frame based on the elapsed time
 
-        float frameSize = body.Dimensions.Height;
+        float frameSize = body.Dimensions.Height; // Calculate the size of each frame
 
-        Rectangle source = Rectangles[CurrentFrame];
+        Rectangle source = Rectangles[CurrentFrame]; // Get the source rectangle for the current frame
         Rectangle dest = new Rectangle(
             body.Transform.Translation.X - (frameSize * ((source.Width / source.Height) - 1) / 2), body.Transform.Translation.Y,
             frameSize * source.Width / source.Height, frameSize
-            );
+            ); // Calculate the destination rectangle for drawing the frame
 
-        Vector2 origin = new Vector2(frameSize / 2.75f, frameSize / 2f);
+        Vector2 origin = new Vector2(frameSize / 2.75f, frameSize / 2f); // Calculate the origin for rotation
 
         if (flipH)
         {
-            source.Width *= -1;
-            origin.X = body.Dimensions.Height - origin.X; // Adjusting the origin when flipped horizontally
+            source.Width *= -1; // Flip the frame horizontally
+            origin.X = body.Dimensions.Height - origin.X; // Adjust the origin when flipped horizontally
         }
 
-        Raylib.DrawTexturePro(Atlas, source, dest, origin, 0, Color.White);
+        Raylib.DrawTexturePro(Atlas, source, dest, origin, 0, Color.White); // Draw the frame using Raylib
+
     }
 
     // Returns if an animation is completed or not
     public bool Completed()
     {
         // Check if time for animation has completed
-        time += Raylib.GetFrameTime();
-        if (time >= (float)TotalFrames / FramesPerSecond)
+        time += Raylib.GetFrameTime(); // Update the elapsed time
+        if (time >= (float)TotalFrames / FramesPerSecond) // Check if the elapsed time exceeds the total animation time
         {
-            time = 0;
-            return true;
+            time = 0; // Reset the elapsed time
+            return true; // Animation is completed
         }
 
-        return false;
+        return false; // Animation is not completed
     }
 }
