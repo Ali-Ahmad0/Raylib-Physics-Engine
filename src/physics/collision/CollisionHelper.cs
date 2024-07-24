@@ -105,7 +105,7 @@ internal struct CollisionHelper
     }
 
     // This method finds contact points between two physics bodies
-    public static void FindContactPoints(PhysicsBody2D bodyA, PhysicsBody2D bodyB, out Vector2 cpoint1, out Vector2 cpoint2, out int ccount)
+    public static void FindContactPoints(CollisionShape2D bodyA, CollisionShape2D bodyB, out Vector2 cpoint1, out Vector2 cpoint2, out int ccount)
     {
         cpoint1 = Vector2.Zero;
         cpoint2 = Vector2.Zero;
@@ -118,7 +118,7 @@ internal struct CollisionHelper
         if (bodyA.Shape == bodyB.Shape)
         {
             // Circle - Circle
-            if (bodyA.Shape == ShapeType.Circle)
+            if (bodyA.Shape == ShapeTypes.Circle)
             {
                 float radius = bodyA.Dimensions.Radius;
 
@@ -204,7 +204,7 @@ internal struct CollisionHelper
             Vector2 centerC;
             Vector2[] vertices;
 
-            if (bodyA.Shape == ShapeType.Circle)
+            if (bodyA.Shape == ShapeTypes.Circle)
             {
                 centerC = centerA;
                 vertices = bodyB.GetTransformedVertices();

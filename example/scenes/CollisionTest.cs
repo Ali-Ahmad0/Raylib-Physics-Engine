@@ -4,10 +4,12 @@ using System.Numerics;
 using GameEngine.src.physics.body;
 using GameEngine.src.input;
 using GameEngine.src.helper;
+using GameEngine.src.physics;
+using System.Runtime.InteropServices;
 
 namespace Game.res.scenes;
 
-public class CollisionTest : RootScene
+public class CollisionTest : WorldEditor
 {
     // Member variables
     private List<PhysicsBody2D> bodies;
@@ -34,8 +36,10 @@ public class CollisionTest : RootScene
         Raylib.HideCursor();
 
         // Create floor
-        CreateStaticBody(new Vector2(640, 900), 0f, Vector2.One, 0.5f, 1200f, 100f, out StaticBody2D staticBody);
+        CreateStaticBody(new Vector2(640, 900), 0f, Vector2.One, 0.5f, ShapeTypes.Box, out StaticBody2D staticBody, 1200f, 100f);
         bodies.Add(staticBody);
+
+
 
         // Create a camera centered at the middle of the screen
         camera = new Camera2D(Vector2.Zero, Vector2.Zero, 0, 1f);
@@ -102,7 +106,9 @@ public class CollisionTest : RootScene
         {
             
             // Create circle rigid body
-            CreateRigidBody(Mouse.GetPos(), scaleCir, 1f, 0.5f, 32f, out RigidBody2D rigidBody);
+            CreateRigidBody(
+                Mouse.GetPos(), 0, scaleCir, 1f, 0.5f, ShapeTypes.Circle, out RigidBody2D rigidBody, radius:32f
+            );
             bodies.Add(rigidBody);
 
         }
@@ -111,7 +117,9 @@ public class CollisionTest : RootScene
         {
 
             // Create box rigid body
-            CreateRigidBody(Mouse.GetPos(), 0f, scaleBox, 1f, 0.5f, 64f, 64f, out RigidBody2D rigidBody);
+            CreateRigidBody(
+                Mouse.GetPos(), 0f, scaleBox, 1f, 0.5f, ShapeTypes.Box, out RigidBody2D rigidBody, width:64f, height:64f
+            );
             bodies.Add(rigidBody);
 
         } 
@@ -119,7 +127,7 @@ public class CollisionTest : RootScene
         // Update and draw each body
         for (int i = 0; i < bodies.Count; i++) 
         {
-            DrawCollisionShapes(bodies[i], colors[i % 5]);
+            DrawCollisionShapes(bodies[i].CollisionShape, colors[i % 5]);
         }
 
         // Cursor icon

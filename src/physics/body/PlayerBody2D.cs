@@ -12,7 +12,7 @@ internal enum PlayerStates
     IDLE, WALK, JUMP, FALL, CROUCH_IDLE, CROUCH_WALK, ATTACK, CROUCH_ATTACK, DIE
 }
 
-public class PlayerBody2D : RigidBox2D
+public class PlayerBody2D : RigidBody2D
 {
     internal PlayerStates State { get; set; }
 
@@ -36,7 +36,7 @@ public class PlayerBody2D : RigidBox2D
     private List<Animation> Animations;
 
     public PlayerBody2D(Vector2 position, float rotation, float width, float height, List<Component> components) :
-        base(position, rotation, 0.985f * width * height, 0.985f, width * height, 0f, width, height, components) 
+        base(position, rotation, 0.985f * width * height, 0.985f, 0f, ShapeTypes.Box, components, width:width, height:height) 
     {
         // Initialize the player
         State = PlayerStates.IDLE;
@@ -268,7 +268,7 @@ public class PlayerBody2D : RigidBox2D
 
         animation.CurrentFrame = GetUpdatedFrame(animation);
 
-        float frameSize = Dimensions.Height;
+        float frameSize = CollisionShape.Dimensions.Height;
 
         Rectangle source = animation.Rectangles[animation.CurrentFrame];
         Rectangle dest = new Rectangle(
@@ -281,7 +281,7 @@ public class PlayerBody2D : RigidBox2D
         if (flipH)
         {
             source.Width *= -1;
-            origin.X = Dimensions.Height - origin.X; // Adjusting the origin when flipped horizontally
+            origin.X = CollisionShape.Dimensions.Height - origin.X; // Adjusting the origin when flipped horizontally
         }
 
         Raylib.DrawTexturePro(animation.Atlas, source, dest, origin, 0, Color.White);
@@ -316,7 +316,7 @@ public class PlayerBody2D : RigidBox2D
         AddAnimation(path + "_CrouchAttack.png", 10, 4, new Rectangle(0, 40, 120, 40));
     }
 
-    public void AddAnimation(string path, int framesPerSecond, int numberOfSprite, Rectangle spriteSize)
+    private void AddAnimation(string path, int framesPerSecond, int numberOfSprite, Rectangle spriteSize)
     {
         // Create a list of rectangles to store the sprite sheet
         List<Rectangle> rectangles = new List<Rectangle>();

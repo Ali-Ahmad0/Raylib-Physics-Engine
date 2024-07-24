@@ -7,22 +7,23 @@ public class Dimensions2D
     // Shape dimensions for a body
     public readonly float Area;
 
-    public readonly float Radius;
-    public readonly float Height;
-    public readonly float Width;
+    public float Radius;
+    public float Height;
+    public float Width;
 
     // Constructor 
     public Dimensions2D() { }
-    public Dimensions2D(float radius, float area)
+    public Dimensions2D(float radius)
     {
         Radius = radius;
-        Area = area;
+        Area = radius * radius;
     }
 
-    public Dimensions2D(Vector2 size, float area)
+    public Dimensions2D(Vector2 size)
     {
         Width = size.X;
         Height = size.Y;
-        Area = area;
+
+        Area = size.X * size.Y;
     }
 }

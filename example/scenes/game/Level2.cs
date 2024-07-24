@@ -8,7 +8,7 @@ using System.Numerics;
 
 namespace GameEngine.example.scenes.game;
 
-public class Level2 : RootScene
+public class Level2 : WorldEditor
 {
     private TileMapProps tileMapProps;
     private List<PhysicsBody2D> bodies;
@@ -48,7 +48,7 @@ public class Level2 : RootScene
 
         // Center the camera on the player's position
 
-        camera.Target = new Vector2(player.Transform.Translation.X + player.Dimensions.Width / 2, player.Transform.Translation.Y + player.Dimensions.Height / 2);
+        camera.Target = new Vector2(player.Transform.Translation.X + player.CollisionShape.Dimensions.Width / 2, player.Transform.Translation.Y + player.CollisionShape.Dimensions.Height / 2);
         camera.Offset = new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight() / 2f);
 
         // Limit camera movement within the tilemap bounds

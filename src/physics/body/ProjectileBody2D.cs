@@ -3,19 +3,20 @@ using GameEngine.src.physics.component;
 
 namespace GameEngine.src.physics.body;
 
-public class ProjectileBody2D : RigidCircle2D
+public class ProjectileBody2D : RigidBody2D
 {
     private List<PhysicsBody2D> bodies;
 
     // Constructor
-    internal ProjectileBody2D(Vector2 position, float area, float radius, List<Component> components, 
+    internal ProjectileBody2D(Vector2 position, float radius, List<Component> components, 
         Vector2 velocity, List<PhysicsBody2D> bodies) :
-        this(position, area, radius, components, velocity, bodies, 2000) { }
+        this(position, radius, components, velocity, bodies, 2000) { }
 
 
     // Constructor with custom destroy time
-    internal ProjectileBody2D(Vector2 position, float area, float radius, List<Component> components,
-        Vector2 velocity, List<PhysicsBody2D> bodies, int time) : base(position, 1, 1, area, 1, radius, components)
+    internal ProjectileBody2D(Vector2 position, float radius, List<Component> components,
+        Vector2 velocity, List<PhysicsBody2D> bodies, int time) 
+        : base(position, 0, 1, 1, 0.5f, ShapeTypes.Circle, components, radius:radius)
     {
         // Initialize the projectile
         this.bodies = bodies;

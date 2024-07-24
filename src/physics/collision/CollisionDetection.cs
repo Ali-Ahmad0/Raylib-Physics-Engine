@@ -15,7 +15,7 @@ internal struct CollisionDetection
     // Collision checks using Seperating Axis Theorem
 
     /* Collision check for Circles and Polygons */
-    private static bool CircPolyCollision(PhysicsBody2D bodyA, PhysicsBody2D bodyB, out Vector2 normal, out float depth)
+    private static bool CircPolyCollision(CollisionShape2D bodyA, CollisionShape2D bodyB, out Vector2 normal, out float depth)
     {
         // Initializing variables for calculation
         normal = Vector2.Zero;
@@ -34,7 +34,7 @@ internal struct CollisionDetection
         if (bodyA.Shape == bodyB.Shape) return false;
         else
         {
-            if (bodyA.Shape == ShapeType.Circle)
+            if (bodyA.Shape == ShapeTypes.Circle)
             {
                 centerC = bodyA.Transform.Translation;
                 radius = bodyA.Dimensions.Radius;
@@ -127,13 +127,13 @@ internal struct CollisionDetection
     }
 
     /* Collision check for Polygons and Polygons */
-    private static bool PolygonCollisions(PhysicsBody2D bodyA, PhysicsBody2D bodyB, out Vector2 normal, out float depth)
+    private static bool PolygonCollisions(CollisionShape2D bodyA, CollisionShape2D bodyB, out Vector2 normal, out float depth)
     {
         // Collision normal and depth
         normal = Vector2.Zero;
         depth = float.MaxValue;
 
-        if (bodyA.Shape == ShapeType.Circle || bodyB.Shape == ShapeType.Circle) return false;
+        if (bodyA.Shape == ShapeTypes.Circle || bodyB.Shape == ShapeTypes.Circle) return false;
 
         // Get vertices and centers for shapes
         Vector2 centerA = bodyA.Transform.Translation;
@@ -211,12 +211,12 @@ internal struct CollisionDetection
     }
 
     /* Collision check for Circles and Circles */
-    private static bool CicrcleCollisions(PhysicsBody2D bodyA, PhysicsBody2D bodyB, out Vector2 normal, out float depth)
+    private static bool CicrcleCollisions(CollisionShape2D bodyA, CollisionShape2D bodyB, out Vector2 normal, out float depth)
     {
         normal = Vector2.Zero;
         depth = 0f;
 
-        if (bodyA.Shape != ShapeType.Circle || bodyB.Shape != ShapeType.Circle) return false;
+        if (bodyA.Shape != ShapeTypes.Circle || bodyB.Shape != ShapeTypes.Circle) return false;
 
         // Get radii and center for shapes
         Vector2 centerA = bodyA.Transform.Translation;
@@ -239,11 +239,10 @@ internal struct CollisionDetection
     }
 
     // Check if any collision occurred
-    public static bool CheckCollision(PhysicsBody2D bodyA, PhysicsBody2D bodyB, out Vector2 normal, out float depth)
+    public static bool CheckCollision(CollisionShape2D bodyA, CollisionShape2D bodyB, out Vector2 normal, out float depth)
     {
         return CircPolyCollision(bodyA, bodyB, out normal, out depth) 
             || PolygonCollisions(bodyA, bodyB, out normal, out depth) || CicrcleCollisions(bodyA, bodyB, out normal, out depth);
 
     }
 }
-

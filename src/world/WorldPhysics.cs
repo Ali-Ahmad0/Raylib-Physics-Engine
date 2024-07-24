@@ -4,22 +4,9 @@ using GameEngine.src.physics.collision;
 using GameEngine.src.main;
 using Raylib_cs;
 using GameEngine.src.helper;
+using System.Runtime.InteropServices;
 
 namespace GameEngine.src.world;
-
-struct State
-{
-    public List<PhysicsBody2D> bodies;
-    public (int, int) pair;
-    public CameraBounds bounds;
-    public State(List<PhysicsBody2D> bodies, (int, int) pair, CameraBounds bounds)
-
-    {
-        this.bodies = bodies;
-        this.pair = pair;
-        this.bounds = bounds;
-    }
-}
 
 internal struct WorldPhysics
 {
@@ -41,8 +28,10 @@ internal struct WorldPhysics
             }
         }
 
-        catch (Exception)
-        { }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
     }
 
     private static void HandleCollisions(List<PhysicsBody2D> bodies, CameraBounds bounds)
@@ -65,13 +54,13 @@ internal struct WorldPhysics
                 PhysicsBody2D bodyB = bodies[j];
 
                 // Check if either body exceeds the camera bounds
-                if (CollisionHelper.AABBExceedsBounds(bodyA.GetAABB(), bounds) ||
-                    CollisionHelper.AABBExceedsBounds(bodyB.GetAABB(), bounds))
+                if (CollisionHelper.AABBExceedsBounds(bodyA.CollisionShape.GetAABB(), bounds) ||
+                    CollisionHelper.AABBExceedsBounds(bodyB.CollisionShape.GetAABB(), bounds))
                 {
                     continue;
                 }
 
-                if (CollisionDetection.AABBIntersection(bodyA.GetAABB(), bodyB.GetAABB()))
+                if (CollisionDetection.AABBIntersection(bodyA.CollisionShape.GetAABB(), bodyB.CollisionShape.GetAABB()))
                     contactPairs.Add((i, j));
 
                 else
@@ -92,14 +81,8 @@ internal struct WorldPhysics
         // Sometimes a projectile body might be destroyed in the middle of the loop, so we need to handle the exception
       
         foreach ((int, int) pair in contactPairs)
-        {
-            if (Properties.EnableMT)
-                tasks.Add(Task.Factory.StartNew((object state) =>
-                { ResolvePair(((State)state).bodies, ((State)state).pair, ((State)state).bounds); }, (Object)(new State(bodies, pair, bounds))));
-                
-            //ThreadPool.QueueUserWorkItem(, (Object)(new State(bodies, pair)));
-            else    
-                ResolvePair(bodies, pair, bounds); 
+        { 
+            ResolvePair(bodies, pair, bounds); 
         }
 
         Task.WaitAll(tasks.ToArray());    
@@ -116,9 +99,9 @@ internal struct WorldPhysics
         Vector2 normal;
         float depth;
 
-        if (CollisionDetection.CheckCollision(bodyA, bodyB, out normal, out depth))
+        if (CollisionDetection.CheckCollision(bodyA.CollisionShape, bodyB.CollisionShape, out normal, out depth))
         {
-            CollisionHelper.FindContactPoints(bodyA, bodyB, out Vector2 contactP1, out Vector2 contactP2, out int contactCount);
+            CollisionHelper.FindContactPoints(bodyA.CollisionShape, bodyB.CollisionShape, out Vector2 contactP1, out Vector2 contactP2, out int contactCount);
             CollisionManifold contact = new CollisionManifold(bodyA, bodyB, normal, depth, contactP1, contactP2, contactCount);
 
             if (bodyA is PlayerBody2D || bodyB is PlayerBody2D)
@@ -142,8 +125,8 @@ internal struct WorldPhysics
     private static void SeparateBodies(PhysicsBody2D bodyA, PhysicsBody2D bodyB, Vector2 direction, CameraBounds bounds)
     {
         // Check if either body exceeds the camera bounds
-        if (CollisionHelper.AABBExceedsBounds(bodyA.GetAABB(), bounds) ||
-            CollisionHelper.AABBExceedsBounds(bodyB.GetAABB(), bounds))
+        if (CollisionHelper.AABBExceedsBounds(bodyA.CollisionShape.GetAABB(), bounds) ||
+            CollisionHelper.AABBExceedsBounds(bodyB.CollisionShape.GetAABB(), bounds))
             return;
 
         if (!(bodyA.HandleCollision && bodyB.HandleCollision))
@@ -188,10 +171,11 @@ internal struct WorldPhysics
     {
         foreach (PhysicsBody2D body in bodies)
         {
-            if (CollisionHelper.AABBExceedsBounds(body.GetAABB(), bounds))
+            if (CollisionHelper.AABBExceedsBounds(body.CollisionShape.GetAABB(), bounds))
                 continue;
 
             if (body is RigidBody2D)
+                
                 body.RunComponents(delta);
         }
     }

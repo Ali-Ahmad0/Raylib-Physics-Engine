@@ -3,6 +3,7 @@ using System.Numerics;
 using Raylib_cs;
 using GameEngine.src.world;
 using System.Text.Json;
+using GameEngine.src.physics;
 
 namespace GameEngine.src.tilemap;
 
@@ -43,7 +44,7 @@ public class TileSet
 }
 
 
-public struct TileMap
+public class TileMap : WorldEditor
 {
     public static void GenerateTileMapTerrain(int[,] grid, int size, List<PhysicsBody2D> bodies)
     {
@@ -119,7 +120,7 @@ public struct TileMap
 
             float width = box.Width * size;
             float height = box.Height * size;
-            WorldCreation.CreateStaticBody(position, 0f, Vector2.One, 0.5f, width, height, out StaticBody2D staticBody);
+            WorldEditor.CreateStaticBody(position, 0f, Vector2.One, 0.5f, ShapeTypes.Box, out StaticBody2D staticBody, width, height);
             bodies.Add(staticBody);
         }
     }

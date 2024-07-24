@@ -10,15 +10,16 @@ public class RigidBody2D : PhysicsBody2D
     protected List<Component> components = new List<Component>();
 
     // Constructor
-    internal RigidBody2D(Vector2 position, float rotation, float mass, float density,
-        float restitution, ShapeType shape, List<Component> components) : base(position, rotation)
+    internal RigidBody2D(Vector2 position, float rotation, float mass, float density, float restitution, 
+        ShapeTypes shape, List<Component> components, float width=0, float height=0, float radius=0)
+        
+        : base(position, rotation, shape, width, height, radius)
     {
         // Keep restitution in valid range
         restitution = Math.Clamp(restitution, 0.0f, 1.0f);
 
         // Create the material for the body
         Material = new Material2D(mass, density, restitution);
-        Shape = shape;
 
         // Initialize velocity and force
         LinVelocity = Vector2.Zero;
@@ -27,6 +28,20 @@ public class RigidBody2D : PhysicsBody2D
 
         // Get components list 
         this.components = components;
+
+        switch (shape)
+        {
+            case ShapeTypes.Box:
+                MomentOfInertia = (1f / 12) * mass * (width * width + height * height);              
+                break;
+
+            case ShapeTypes.Circle:
+                MomentOfInertia = (1f / 2) * mass * (radius * radius);
+                break;
+
+            default:
+                throw new ArgumentException("[ERROR]: Invalid ShapeType");
+        }
     }
 
     // Apply a force to the physics body
@@ -38,40 +53,9 @@ public class RigidBody2D : PhysicsBody2D
     // Run all components attached to the physics body in parallel
     internal override void RunComponents(double delta)
     {
-        components[0].RunComponent(this, delta);
-
-        if (ApplyGravity)
-            components[1].RunComponent(this, delta);
+        foreach (Component component in components)
+        {
+            component.RunComponent(this, delta);
+        }
     }
-}
-
-public class RigidBox2D : RigidBody2D
-{
-    // Constructor
-    internal RigidBox2D(Vector2 position, float rotation, float mass, float density, float area, float restitution,
-        float width, float height, List<Component> components) : base(position, rotation, mass, density, restitution, ShapeType.Box, components)
-    {
-        // Initialize dimensions and vertices
-        Dimensions = new Dimensions2D(new Vector2(width, height), area);
-        MapVerticesBox();
-
-        // I = m/12 * (w^2 + h^2)
-        MomentOfInertia = (1f / 12) * mass * (width * width + height * height);
-
-    }
-}
-
-public class RigidCircle2D : RigidBody2D
-{
-    // Constructor
-    internal RigidCircle2D(Vector2 position, float mass, float density, float area, float restitution,
-        float radius, List<Component> components) : base(position, 0f, mass, density, restitution, ShapeType.Circle, components)
-    {
-        // Initialize dimensions
-        Dimensions = new Dimensions2D(radius, area);
-
-        // I = m/2 * r^2
-        MomentOfInertia = (1f / 2) * mass * (radius * radius);
-    }
-
 }

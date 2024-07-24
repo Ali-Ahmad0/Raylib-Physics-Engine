@@ -7,7 +7,7 @@ using System.Numerics;
 
 namespace Game.res.scenes;
 
-public class ProjectileTest : RootScene
+public class ProjectileTest : WorldEditor
 {
     private List<PhysicsBody2D> bodies;
     private List<Color> colors;
@@ -75,7 +75,7 @@ public class ProjectileTest : RootScene
         // Update and draw each body
         for (int i = 0; i < bodies.Count; i++)
         {
-            DrawCollisionShapes(bodies[i], colors[i % 5]);
+            DrawCollisionShapes(bodies[i].CollisionShape, colors[i % 5]);
         }
 
         Raylib.DrawText("< >", (int)cursorPos.X, (int)cursorPos.Y, 32, Color.Green);

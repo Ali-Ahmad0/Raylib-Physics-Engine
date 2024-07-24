@@ -6,7 +6,7 @@ using System.Numerics;
 
 namespace Game.res.scenes;
 
-public class TilemapTest : RootScene
+public class TilemapTest : WorldEditor
 {
     private TileMapProps tileMapProps;
     private List<PhysicsBody2D> bodies;
@@ -72,7 +72,7 @@ public class TilemapTest : RootScene
     {
         for (int i = 0; i < bodies.Count; i++)
         {
-            DrawCollisionShapes(bodies[i], colors[i % 4]);
+            DrawCollisionShapes(bodies[i].CollisionShape, colors[i % 4]);
         }
     }
 
