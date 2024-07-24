@@ -1,27 +1,28 @@
-﻿using GameEngine.src.physics.component;
+﻿using GameEngine.src.helper;
+using GameEngine.src.input;
+using GameEngine.src.main;
+using GameEngine.src.physics.body;
+using GameEngine.src.physics.component;
 using Raylib_cs;
 using System.Numerics;
-using GameEngine.src.input;
-using GameEngine.src.helper;
-using GameEngine.src.main;
 
-namespace GameEngine.src.physics.body;
+namespace GameEngine.example.scenes.game;
 
 internal enum PlayerStates
 {
     IDLE, WALK, JUMP, FALL, CROUCH_IDLE, CROUCH_WALK, ATTACK, CROUCH_ATTACK, DIE
 }
 
-public class PlayerBody2D : RigidBody2D
+public class Player : CharacterBody2D
 {
     internal PlayerStates State { get; set; }
 
     // Default Player Motion logic (optional)
-    private float maxSpeed = 5000;
-    private float acceleration = 500;
+    private float maxSpeed = 20;
+    private float acceleration = 2;
 
-    private float landDeceleration = 750;
-    private float airDeceleration = 300;
+    private float landDeceleration = 5;
+    private float airDeceleration = 1;
 
     private const int JUMP_BUFFER_TIME = 15;
     private const int CAYOTE_JUMP_TIME = 10;
@@ -35,9 +36,10 @@ public class PlayerBody2D : RigidBody2D
 
     private List<Animation> Animations;
 
-    public PlayerBody2D(Vector2 position, float rotation, float width, float height, List<Component> components) :
-        base(position, rotation, 0.985f * width * height, 0.985f, 0f, ShapeTypes.Box, components, width:width, height:height) 
+    public Player(Vector2 position, float rotation, float width, float height) : base(position, rotation, width, height)
     {
+        components.Add(new Gravity(15f));
+
         // Initialize the player
         State = PlayerStates.IDLE;
         flipH = false;
@@ -54,11 +56,12 @@ public class PlayerBody2D : RigidBody2D
         Gamepad.AssignButton("jump", GamepadButton.RightFaceDown);
         Gamepad.AssignButton("crouch", GamepadButton.RightFaceRight);
         Gamepad.AssignButton("attack", GamepadButton.RightTrigger2);
+
     }
 
-    public void UseDefaultPlayer(double delta)
+    public void Update(double delta)
     {
-        if (State != PlayerStates.ATTACK && State != PlayerStates.CROUCH_ATTACK) 
+        if (State != PlayerStates.ATTACK && State != PlayerStates.CROUCH_ATTACK)
         {
             MovePlayer(delta);
             Jump();
@@ -103,7 +106,7 @@ public class PlayerBody2D : RigidBody2D
         }
 
         LinVelocity.X = (float)Math.Clamp(LinVelocity.X, -maxSpeed * delta, maxSpeed * delta);
-        
+
     }
 
     // Crouching
@@ -111,13 +114,13 @@ public class PlayerBody2D : RigidBody2D
     {
         if ((Input.IsKeyDown("crouch") || Gamepad.IsButtonDown("crouch")) && IsOnFloor)
         {
-            maxSpeed = 2000;
+            maxSpeed = 10;
             State = LinVelocity.X == 0 ? PlayerStates.CROUCH_IDLE : PlayerStates.CROUCH_WALK;
         }
 
         else
         {
-            maxSpeed = 5000;
+            maxSpeed = 20;
         }
     }
 
@@ -156,7 +159,7 @@ public class PlayerBody2D : RigidBody2D
         // Check valid condition for jump
         if (jumpBufferCounter > 0 && cayoteJumpCounter > 0)
         {
-            LinVelocity.Y = -0.425f;
+            LinVelocity.Y = -0.65f;
 
             jumpBufferCounter = 0;
             cayoteJumpCounter = 0;
@@ -175,7 +178,7 @@ public class PlayerBody2D : RigidBody2D
                 if (State is PlayerStates.CROUCH_IDLE || State is PlayerStates.CROUCH_WALK)
                     State = PlayerStates.CROUCH_ATTACK;
 
-                else 
+                else
                 {
                     attackCounter = (attackCounter + 1) % 2;
                     State = PlayerStates.ATTACK;
@@ -226,7 +229,7 @@ public class PlayerBody2D : RigidBody2D
                 {
                     State = PlayerStates.IDLE;
                 }
-                    
+
                 break;
 
             case PlayerStates.CROUCH_ATTACK:
@@ -287,7 +290,7 @@ public class PlayerBody2D : RigidBody2D
         Raylib.DrawTexturePro(animation.Atlas, source, dest, origin, 0, Color.White);
     }
 
-    private bool Completed(Animation animation) 
+    private bool Completed(Animation animation)
     {
         if (GetUpdatedFrame(animation) >= animation.TotalFrames - 1)
             return true;
@@ -326,7 +329,7 @@ public class PlayerBody2D : RigidBody2D
         }
         Animation anim = new Animation(Raylib.LoadTexture(path), framesPerSecond, rectangles);
         Animations.Add(anim);
-        
+
     }
 }
 
@@ -347,4 +350,5 @@ internal struct Animation
         CurrentFrame = 0;
     }
 }
+
 

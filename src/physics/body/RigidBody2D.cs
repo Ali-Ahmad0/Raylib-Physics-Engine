@@ -7,11 +7,11 @@ public class RigidBody2D : PhysicsBody2D
 {
     // Force applied to the body
     public Vector2 Force { get; internal set; }
-    protected List<Component> components = new List<Component>();
+    public List<Component> components = new List<Component>() { new Motion(), new Gravity() };
 
     // Constructor
-    internal RigidBody2D(Vector2 position, float rotation, float mass, float density, float restitution, 
-        ShapeTypes shape, List<Component> components, float width=0, float height=0, float radius=0)
+    internal RigidBody2D(Vector2 position, float rotation, float mass, float density, 
+        float restitution, ShapeTypes shape, float width=0, float height=0, float radius=0)
         
         : base(position, rotation, shape, width, height, radius)
     {
@@ -25,9 +25,6 @@ public class RigidBody2D : PhysicsBody2D
         LinVelocity = Vector2.Zero;
         RotVelocity = 0f;
         Force = Vector2.Zero;
-
-        // Get components list 
-        this.components = components;
 
         switch (shape)
         {

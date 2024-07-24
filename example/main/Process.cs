@@ -59,7 +59,7 @@ internal class Process
                 Raylib.DrawFPS((int)fpsPositionX, (int)fpsPositionY);
             }
 
-            double delta = Raylib.GetFrameTime() / (256);
+            double delta = Raylib.GetFrameTime();
             SceneTree.Update(delta);
 
             Raylib.EndDrawing();

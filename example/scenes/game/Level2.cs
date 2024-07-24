@@ -1,6 +1,7 @@
 ﻿using Game.res.scenes;
 using GameEngine.src.main;
 using GameEngine.src.physics.body;
+using GameEngine.src.physics.component;
 using GameEngine.src.tilemap;
 using GameEngine.src.world;
 using Raylib_cs;
@@ -20,7 +21,9 @@ public class Level2 : WorldEditor
         bodies = new List<PhysicsBody2D>();
 
         // Create player
-        CreatePlayerBody(new Vector2(256, 512), 0, 1f, 64f, 128f, out PlayerBody2D player);
+        //CreatePlayerBody(new Vector2(256, 512), 0, 1f, 64f, 128f, out PlayerBody2D player);
+        
+        Player player = new Player(new Vector2(256, 512), 0, 64f, 128f);
         bodies.Add(player);
 
         int[,] tilemap = TileMap.GetTilemapFromJSON(Path.Combine(Properties.ExecutableDirectory, "../../../example/assets/tilemap/") + "level_2.json");
@@ -44,7 +47,7 @@ public class Level2 : WorldEditor
 
     public override void Update(double delta)
     {
-        PlayerBody2D player = (PlayerBody2D)bodies[0];
+        Player player = (Player)bodies[0];
 
         // Center the camera on the player's position
 
@@ -65,7 +68,7 @@ public class Level2 : WorldEditor
         Raylib.BeginMode2D(camera);
         Draw();
 
-        player.UseDefaultPlayer(delta);
+        player.Update(delta);
         
         if (player.Transform.Translation.X > 5660)
         {

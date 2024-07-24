@@ -4,11 +4,12 @@ using Raylib_cs;
 using System.Numerics;
 using GameEngine.src.tilemap;
 using GameEngine.src.main;
+using GameEngine.example.scenes.game;
 
 namespace Game.res.scenes;
 
 internal class PlayerTest : WorldEditor
-    {
+{
     private TileMapProps tileMapProps;
     private List<PhysicsBody2D> bodies;
 
@@ -19,7 +20,9 @@ internal class PlayerTest : WorldEditor
         bodies = new List<PhysicsBody2D>();
 
         // Create player
-        CreatePlayerBody(new Vector2(128, 512), 0, 1f, 64f, 128f, out PlayerBody2D player);
+        //CreatePlayerBody(new Vector2(128, 512), 0, 1f, 64f, 128f, out PlayerBody2D temp);
+        Player player = new Player(new Vector2(128, 512), 0, 64f, 128f);
+
         bodies.Add(player);
 
         int[,] tilemap = TileMap.GetTilemapFromJSON(Path.Combine(Properties.ExecutableDirectory, "../../../example/assets/tilemap/") + "player_test.json");
@@ -49,8 +52,8 @@ internal class PlayerTest : WorldEditor
         Raylib.BeginMode2D(camera);
         Draw();
 
-        PlayerBody2D player = (PlayerBody2D)bodies[0];
-        player.UseDefaultPlayer(delta);
+        Player player = (Player)bodies[0];
+        player.Update(delta);
 
         Raylib.EndMode2D();
 

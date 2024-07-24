@@ -3,7 +3,6 @@ using GameEngine.src.physics.body;
 using Raylib_cs;
 using System.Numerics;
 using GameEngine.src.physics;
-using System.Net.Security;
 
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 
@@ -76,7 +75,7 @@ public abstract class WorldEditor
                 mass = (area * density) / 1000;
                 
                 body2D = new RigidBody2D(
-                    position, rotation, mass, density, restitution, shape, components, width: width, height: height
+                    position, rotation, mass, density, restitution, shape, width: width, height: height
                 );
                 
                 break;
@@ -93,7 +92,7 @@ public abstract class WorldEditor
 
                 // Create a rigid body 
                 body2D = new RigidBody2D(
-                    position, 0, mass, density, restitution, shape, components, radius: radius
+                    position, 0, mass, density, restitution, shape, radius: radius
                 );
 
                 break;
@@ -161,20 +160,7 @@ public abstract class WorldEditor
         float mass = (area * density) / 1000;
 
         // Create a rigid body 
-        body2D = new ProjectileBody2D(position, radius, components, velocity, bodies);
-    }
-
-    protected static void CreatePlayerBody(Vector2 position, float rotation, float density, 
-        float width, float height, out PlayerBody2D body2D)
-    {
-        body2D = null;
-
-        float area = width * height;
-
-        ValidateParameters(area, density);
-
-        // Create a rigid body 
-        body2D = new PlayerBody2D(position, rotation, width, height, components);
+        body2D = new ProjectileBody2D(position, radius, velocity, bodies);
     }
 
     private static void ValidateParameters(float area, float density = 0)

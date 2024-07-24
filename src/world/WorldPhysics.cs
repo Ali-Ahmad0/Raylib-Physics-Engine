@@ -18,6 +18,8 @@ internal struct WorldPhysics
         CameraBounds bounds = new CameraBounds();
         bounds.Calculate(camera);
 
+        delta /= 256;
+
         // Catch exception caused by projectiles
         try
         {
@@ -104,7 +106,7 @@ internal struct WorldPhysics
             CollisionHelper.FindContactPoints(bodyA.CollisionShape, bodyB.CollisionShape, out Vector2 contactP1, out Vector2 contactP2, out int contactCount);
             CollisionManifold contact = new CollisionManifold(bodyA, bodyB, normal, depth, contactP1, contactP2, contactCount);
 
-            if (bodyA is PlayerBody2D || bodyB is PlayerBody2D)
+            if (bodyA is CharacterBody2D || bodyB is CharacterBody2D)
                 CollisionResolution.ResolveCollisionBasic(bodyA, bodyB, normal, depth);
 
             bodyA.IsColliding = true;
