@@ -1,11 +1,13 @@
 ﻿using System.Numerics;
+using GameEngine.src.physics.collision.shape;
 
 namespace GameEngine.src.physics.body;
+
 
 public class StaticBody2D : PhysicsBody2D
 {
     // Constructor
-    internal StaticBody2D(Vector2 position, float rotation, float restitution, ShapeTypes shape, 
+    internal StaticBody2D(Vector2 position, float rotation, float restitution, ShapeType shape, 
         float width=0, float height=0, float radius=0) 
         
         : base(position, rotation, shape, width, height, radius)

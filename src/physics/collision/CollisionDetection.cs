@@ -1,4 +1,5 @@
 ﻿using GameEngine.src.physics.body;
+using GameEngine.src.physics.collision.shape;
 using System.Numerics;
 
 namespace GameEngine.src.physics.collision;
@@ -34,7 +35,7 @@ internal struct CollisionDetection
         if (bodyA.Shape == bodyB.Shape) return false;
         else
         {
-            if (bodyA.Shape == ShapeTypes.Circle)
+            if (bodyA.Shape == ShapeType.Circle)
             {
                 centerC = bodyA.Transform.Translation;
                 radius = bodyA.Dimensions.Radius;
@@ -133,7 +134,7 @@ internal struct CollisionDetection
         normal = Vector2.Zero;
         depth = float.MaxValue;
 
-        if (bodyA.Shape == ShapeTypes.Circle || bodyB.Shape == ShapeTypes.Circle) return false;
+        if (bodyA.Shape == ShapeType.Circle || bodyB.Shape == ShapeType.Circle) return false;
 
         // Get vertices and centers for shapes
         Vector2 centerA = bodyA.Transform.Translation;
@@ -216,7 +217,7 @@ internal struct CollisionDetection
         normal = Vector2.Zero;
         depth = 0f;
 
-        if (bodyA.Shape != ShapeTypes.Circle || bodyB.Shape != ShapeTypes.Circle) return false;
+        if (bodyA.Shape != ShapeType.Circle || bodyB.Shape != ShapeType.Circle) return false;
 
         // Get radii and center for shapes
         Vector2 centerA = bodyA.Transform.Translation;

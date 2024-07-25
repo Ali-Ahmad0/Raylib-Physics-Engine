@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using GameEngine.src.physics.component;
+using GameEngine.src.physics.collision.shape;
 
 namespace GameEngine.src.physics.body;
 
@@ -11,7 +12,7 @@ public class RigidBody2D : PhysicsBody2D
 
     // Constructor
     internal RigidBody2D(Vector2 position, float rotation, float mass, float density, 
-        float restitution, ShapeTypes shape, float width=0, float height=0, float radius=0)
+        float restitution, ShapeType shape, float width=0, float height=0, float radius=0)
         
         : base(position, rotation, shape, width, height, radius)
     {
@@ -28,11 +29,11 @@ public class RigidBody2D : PhysicsBody2D
 
         switch (shape)
         {
-            case ShapeTypes.Box:
+            case ShapeType.Box:
                 MomentOfInertia = (1f / 12) * mass * (width * width + height * height);              
                 break;
 
-            case ShapeTypes.Circle:
+            case ShapeType.Circle:
                 MomentOfInertia = (1f / 2) * mass * (radius * radius);
                 break;
 

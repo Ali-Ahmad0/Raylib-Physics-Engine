@@ -1,6 +1,5 @@
 ﻿using System.Numerics;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.InteropServices;
+using GameEngine.src.physics.collision.shape;
 
 namespace GameEngine.src.physics.body;
 
@@ -29,7 +28,7 @@ public abstract class PhysicsBody2D : BaseObject
     public float MomentOfInertia { get; protected set; }
 
     // Constructor
-    public PhysicsBody2D(Vector2 position, float rotation, ShapeTypes shape, float width = 0, float height = 0, float radius=0) 
+    public PhysicsBody2D(Vector2 position, float rotation, ShapeType shape, float width = 0, float height = 0, float radius=0) 
         : base(position, rotation)
     {       
         HandleCollision = true;

@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace GameEngine.src.physics.collision;
+namespace GameEngine.src.physics.collision.shape;
 
 // Create a box boundary around a shape
 public class AxisAlignedBoundingBox
@@ -16,8 +16,8 @@ public class AxisAlignedBoundingBox
         Min = min;
         Max = max;
     }
-    
-    internal AxisAlignedBoundingBox(float minX, float minY, float maxX, float maxY) 
+
+    internal AxisAlignedBoundingBox(float minX, float minY, float maxX, float maxY)
     {
         Min = new Vector2(minX, minY);
         Max = new Vector2(maxX, maxY);

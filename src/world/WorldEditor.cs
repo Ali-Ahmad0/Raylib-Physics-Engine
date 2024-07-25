@@ -1,8 +1,8 @@
 ﻿using GameEngine.src.physics.component;
 using GameEngine.src.physics.body;
+using GameEngine.src.physics.collision.shape;
 using Raylib_cs;
 using System.Numerics;
-using GameEngine.src.physics;
 
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 
@@ -39,13 +39,13 @@ public abstract class WorldEditor
 
         switch (collision.Shape)
         {
-            case ShapeTypes.Box:
+            case ShapeType.Box:
 
                 // Draw the rectangle
                 Raylib.DrawRectanglePro(new Rectangle(position, size), new Vector2(width / 2, height / 2), rotation, color);
                 break;
 
-            case ShapeTypes.Circle:
+            case ShapeType.Circle:
 
                 // Draw the circle
                 Raylib.DrawCircleV(position, radius, color); ;
@@ -57,14 +57,14 @@ public abstract class WorldEditor
 
     // Creates a Circle RigidBody
     protected static void CreateRigidBody(Vector2 position, float rotation, Vector2 scale, float density, 
-        float restitution, ShapeTypes shape, out RigidBody2D body2D, float width=0, float height=0, float radius=0)
+        float restitution, ShapeType shape, out RigidBody2D body2D, float width=0, float height=0, float radius=0)
     {
         body2D = null;
         float area = 0; float mass = 0;
 
         switch (shape)
         {
-            case ShapeTypes.Box:
+            case ShapeType.Box:
                 width *= scale.X; height *= scale.Y;
 
                 // Calculate the area for the rigid body
@@ -80,7 +80,7 @@ public abstract class WorldEditor
                 
                 break;
 
-            case ShapeTypes.Circle:
+            case ShapeType.Circle:
                 radius *= scale.Length();
 
                 // Calculate the area for the rigid body
@@ -102,7 +102,7 @@ public abstract class WorldEditor
 
     // Creates a Circle StaticBody
     protected static void CreateStaticBody(Vector2 position, float rotation, Vector2 scale, float restitution,
-        ShapeTypes shape, out StaticBody2D body2D, float width = 0, float height = 0, float radius = 0)
+        ShapeType shape, out StaticBody2D body2D, float width = 0, float height = 0, float radius = 0)
     {
         body2D = null;
 
@@ -111,7 +111,7 @@ public abstract class WorldEditor
 
         switch (shape)
         {
-            case ShapeTypes.Box:
+            case ShapeType.Box:
                 width *= scale.X; height *= scale.Y;
 
                 // Calculate the area for the rigid body
@@ -124,7 +124,7 @@ public abstract class WorldEditor
 
                 break;
 
-            case ShapeTypes.Circle:
+            case ShapeType.Circle:
                 radius *= scale.Length();
 
                 // Calculate the area for the rigid body

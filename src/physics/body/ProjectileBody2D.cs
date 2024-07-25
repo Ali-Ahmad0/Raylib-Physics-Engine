@@ -1,5 +1,5 @@
 ﻿using System.Numerics;
-using GameEngine.src.physics.component;
+using GameEngine.src.physics.collision.shape;
 
 namespace GameEngine.src.physics.body;
 
@@ -14,7 +14,7 @@ public class ProjectileBody2D : RigidBody2D
 
     // Constructor with custom destroy time
     internal ProjectileBody2D(Vector2 position, float radius, Vector2 velocity, List<PhysicsBody2D> bodies, int time) 
-        : base(position, 0, 1, 1, 0.5f, ShapeTypes.Circle, radius:radius)
+        : base(position, 0, 1, 1, 0.5f, ShapeType.Circle, radius:radius)
     {
         // Initialize the projectile
         this.bodies = bodies;

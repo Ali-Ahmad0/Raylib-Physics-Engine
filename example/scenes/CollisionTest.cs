@@ -4,8 +4,7 @@ using System.Numerics;
 using GameEngine.src.physics.body;
 using GameEngine.src.input;
 using GameEngine.src.helper;
-using GameEngine.src.physics;
-using System.Runtime.InteropServices;
+using GameEngine.src.physics.collision.shape;
 
 namespace Game.res.scenes;
 
@@ -36,7 +35,7 @@ public class CollisionTest : WorldEditor
         Raylib.HideCursor();
 
         // Create floor
-        CreateStaticBody(new Vector2(640, 900), 0f, Vector2.One, 0.5f, ShapeTypes.Box, out StaticBody2D staticBody, 1200f, 100f);
+        CreateStaticBody(new Vector2(640, 900), 0f, Vector2.One, 0.5f, ShapeType.Box, out StaticBody2D staticBody, 1200f, 100f);
         bodies.Add(staticBody);
 
 
@@ -107,7 +106,7 @@ public class CollisionTest : WorldEditor
             
             // Create circle rigid body
             CreateRigidBody(
-                Mouse.GetPos(), 0, scaleCir, 1f, 0.5f, ShapeTypes.Circle, out RigidBody2D rigidBody, radius:32f
+                Mouse.GetPos(), 0, scaleCir, 1f, 0.5f, ShapeType.Circle, out RigidBody2D rigidBody, radius:32f
             );
             bodies.Add(rigidBody);
 
@@ -118,7 +117,7 @@ public class CollisionTest : WorldEditor
 
             // Create box rigid body
             CreateRigidBody(
-                Mouse.GetPos(), 0f, scaleBox, 1f, 0.5f, ShapeTypes.Box, out RigidBody2D rigidBody, width:64f, height:64f
+                Mouse.GetPos(), 0f, scaleBox, 1f, 0.5f, ShapeType.Box, out RigidBody2D rigidBody, width:64f, height:64f
             );
             bodies.Add(rigidBody);
 

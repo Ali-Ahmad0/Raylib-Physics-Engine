@@ -1,5 +1,6 @@
 ﻿using GameEngine.src.helper;
 using GameEngine.src.physics.body;
+using GameEngine.src.physics.collision.shape;
 using System.Numerics;
 
 namespace GameEngine.src.physics.collision;
@@ -118,7 +119,7 @@ internal struct CollisionHelper
         if (bodyA.Shape == bodyB.Shape)
         {
             // Circle - Circle
-            if (bodyA.Shape == ShapeTypes.Circle)
+            if (bodyA.Shape == ShapeType.Circle)
             {
                 float radius = bodyA.Dimensions.Radius;
 
@@ -204,7 +205,7 @@ internal struct CollisionHelper
             Vector2 centerC;
             Vector2[] vertices;
 
-            if (bodyA.Shape == ShapeTypes.Circle)
+            if (bodyA.Shape == ShapeType.Circle)
             {
                 centerC = centerA;
                 vertices = bodyB.GetTransformedVertices();

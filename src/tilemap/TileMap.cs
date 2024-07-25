@@ -3,7 +3,7 @@ using System.Numerics;
 using Raylib_cs;
 using GameEngine.src.world;
 using System.Text.Json;
-using GameEngine.src.physics;
+using GameEngine.src.physics.collision.shape;
 
 namespace GameEngine.src.tilemap;
 
@@ -120,7 +120,7 @@ public class TileMap : WorldEditor
 
             float width = box.Width * size;
             float height = box.Height * size;
-            WorldEditor.CreateStaticBody(position, 0f, Vector2.One, 0.5f, ShapeTypes.Box, out StaticBody2D staticBody, width, height);
+            WorldEditor.CreateStaticBody(position, 0f, Vector2.One, 0.5f, ShapeType.Box, out StaticBody2D staticBody, width, height);
             bodies.Add(staticBody);
         }
     }

@@ -64,7 +64,7 @@ public class Player : CharacterBody2D
         if (State != PlayerStates.ATTACK && State != PlayerStates.CROUCH_ATTACK)
         {
             MovePlayer(delta);
-            Jump();
+            Jump(delta);
             Crouch();
         }
 
@@ -124,7 +124,7 @@ public class Player : CharacterBody2D
         }
     }
 
-    private void Jump()
+    private void Jump(double delta)
     {
         if (!IsOnFloor)
         {
@@ -159,7 +159,7 @@ public class Player : CharacterBody2D
         // Check valid condition for jump
         if (jumpBufferCounter > 0 && cayoteJumpCounter > 0)
         {
-            LinVelocity.Y = -0.65f;
+            LinVelocity.Y = -40 * (float)delta;
 
             jumpBufferCounter = 0;
             cayoteJumpCounter = 0;

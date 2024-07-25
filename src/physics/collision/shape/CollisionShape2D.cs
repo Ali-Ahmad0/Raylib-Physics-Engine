@@ -1,19 +1,18 @@
 ﻿using GameEngine.src.helper;
-using GameEngine.src.physics.collision;
 using System.Numerics;
 
-namespace GameEngine.src.physics;
+namespace GameEngine.src.physics.collision.shape;
 
 #pragma warning disable CS8618 // Non nullable field must have non null value when exiting constructor.
 
-public enum ShapeTypes
+public enum ShapeType
 {
     Circle, Box
 }
 
 public class CollisionShape2D : BaseObject
 {
-    public ShapeTypes Shape;
+    public ShapeType Shape;
 
     public Dimensions2D Dimensions;
 
@@ -24,7 +23,7 @@ public class CollisionShape2D : BaseObject
     protected bool VerticesUpdateRequired;
     protected bool AABBUpdateRequired;
 
-    public CollisionShape2D(Vector2 position, float rotation, ShapeTypes shape, float width=0, float height=0, float radius=0) 
+    public CollisionShape2D(Vector2 position, float rotation, ShapeType shape, float width = 0, float height = 0, float radius = 0)
         : base(position, rotation)
     {
         VerticesUpdateRequired = true;
@@ -32,12 +31,12 @@ public class CollisionShape2D : BaseObject
 
         switch (shape)
         {
-            case ShapeTypes.Box:
+            case ShapeType.Box:
                 Dimensions = new Dimensions2D(new Vector2(width, height));
                 MapVerticesBox();
                 break;
 
-            case ShapeTypes.Circle:
+            case ShapeType.Circle:
                 Dimensions = new Dimensions2D(radius);
                 break;
 
@@ -80,7 +79,7 @@ public class CollisionShape2D : BaseObject
         // Otherwise create new AABB based on shape
         switch (Shape)
         {
-            case ShapeTypes.Box:
+            case ShapeType.Box:
                 // Get transformed vertices
                 Vector2[] vertices = GetTransformedVertices();
 
@@ -99,7 +98,7 @@ public class CollisionShape2D : BaseObject
                 AABB = new AxisAlignedBoundingBox(minX, minY, maxX, maxY);
                 break;
 
-            case ShapeTypes.Circle:
+            case ShapeType.Circle:
 
                 // Calculate AABB based on circle radius
                 float radius = Dimensions.Radius;
@@ -134,7 +133,7 @@ public class CollisionShape2D : BaseObject
         TransformedVertices = new Vector2[Vertices.Length];
     }
 
-    public override void Translate(Vector2 direction) 
+    public override void Translate(Vector2 direction)
     {
         base.Translate(direction);
         SetUpdateRequiredTrue();
