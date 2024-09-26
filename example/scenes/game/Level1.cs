@@ -1,4 +1,5 @@
 ﻿using Game.res.scenes;
+using GameEngine.src;
 using GameEngine.src.main;
 using GameEngine.src.physics.body;
 using GameEngine.src.physics.component;
@@ -9,7 +10,7 @@ using System.Numerics;
 
 namespace GameEngine.example.scenes.game
 {
-    public class Level1 : WorldEditor
+    public class Level1 : World
     {
         private TileMapProps tileMapProps;
         private List<PhysicsBody2D> bodies;

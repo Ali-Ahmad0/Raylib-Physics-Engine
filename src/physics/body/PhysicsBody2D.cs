@@ -7,6 +7,13 @@ namespace GameEngine.src.physics.body;
 
 public abstract class PhysicsBody2D : BaseObject
 {
+    // Constraints
+    protected static readonly float MIN_BODY_SIZE = 0.01f * 0.01f;
+    protected static readonly float MAX_BODY_SIZE = 2048f * 2048f;
+
+    protected static readonly float MIN_DENSITY = 0.10f;
+    protected static readonly float MAX_DENSITY = 22.5f;
+
     public string Name;
     
     public Material2D Material { get; protected set; }
@@ -57,6 +64,26 @@ public abstract class PhysicsBody2D : BaseObject
     {
         base.Rotate(angle);
         CollisionShape.Rotate(angle); 
+    }
+
+    protected static void ValidateParameters(float area, float density = 0)
+    {
+        string errorMessage = string.Empty;
+
+        if (area < MIN_BODY_SIZE || area > MAX_BODY_SIZE)
+            errorMessage = area < MIN_BODY_SIZE ? $"[ERROR]: Body area is too small, Minimum Area: {MIN_BODY_SIZE}" :
+                           $"[ERROR]: Body area is too large, Maximum Area: {MAX_BODY_SIZE}";
+
+        if (density != 0 && (density < MIN_DENSITY || density > MAX_DENSITY))
+            errorMessage += errorMessage != string.Empty ? Environment.NewLine : string.Empty +
+                            (density < MIN_DENSITY ? $"[ERROR]: Body density is too low, Minimum Density: {MIN_DENSITY}" :
+                                                     $"[ERROR]: Body density is too high, Maximum Density: {MAX_DENSITY}");
+
+        // Throw exception with error message
+        if (!string.IsNullOrEmpty(errorMessage))
+            throw new Exception(errorMessage);
+
+        else return;
     }
 
     // Methods to be overridden

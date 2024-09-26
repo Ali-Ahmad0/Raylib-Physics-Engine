@@ -1,14 +1,12 @@
 ﻿using System.Numerics;
 using GameEngine.src.physics.body;
 using GameEngine.src.physics.collision;
-using GameEngine.src.main;
 using Raylib_cs;
 using GameEngine.src.helper;
-using System.Runtime.InteropServices;
 
 namespace GameEngine.src.world;
 
-internal struct WorldPhysics
+internal struct Physics
 {
     private static object lockOject = new object();
     private static HashSet<(int, int)> contactPairs = new HashSet<(int, int)>();

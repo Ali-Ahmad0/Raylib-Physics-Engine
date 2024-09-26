@@ -8,7 +8,7 @@ using GameEngine.src.physics.collision.shape;
 
 namespace Game.res.scenes;
 
-public class CollisionTest : WorldEditor
+public class CollisionTest : World
 {
     // Member variables
     private List<PhysicsBody2D> bodies;
@@ -35,10 +35,13 @@ public class CollisionTest : WorldEditor
         Raylib.HideCursor();
 
         // Create floor
-        CreateStaticBody(new Vector2(640, 900), 0f, Vector2.One, 0.5f, ShapeType.Box, out StaticBody2D staticBody, 1200f, 100f);
-        bodies.Add(staticBody);
-
-
+        StaticBody2D slope1 = new StaticBody2D(new Vector2(300, 380), 10f, Vector2.One, 0.5f, ShapeType.Box, width: 360f, height: 80f);
+        StaticBody2D slope2 = new StaticBody2D(new Vector2(900, 320), -15f, Vector2.One, 0.5f, ShapeType.Box, width: 400f, height: 80f);
+        StaticBody2D floor = new StaticBody2D(new Vector2(640, 900), 0f, Vector2.One, 0.5f, ShapeType.Box, width:1200f, height:100f);
+        
+        bodies.Add(floor);
+        bodies.Add(slope1);
+        bodies.Add(slope2);
 
         // Create a camera centered at the middle of the screen
         camera = new Camera2D(Vector2.Zero, Vector2.Zero, 0, 1f);
@@ -103,12 +106,13 @@ public class CollisionTest : WorldEditor
         // Create bodies (testing)
         if (Mouse.IsRMBPressed() || Gamepad.IsButtonPressed("r1")) 
         {
-            
+
             // Create circle rigid body
-            CreateRigidBody(
-                Mouse.GetPos(), 0, scaleCir, 1f, 0.5f, ShapeType.Circle, out RigidBody2D rigidBody, radius:32f
-            );
-            bodies.Add(rigidBody);
+            RigidBody2D circle = new RigidBody2D(Mouse.GetPos(), 0, scaleCir, 1f, 0.5f, ShapeType.Circle, radius: 32f);
+            //CreateRigidBody(
+              //  Mouse.GetPos(), 0, scaleCir, 1f, 0.5f, ShapeType.Circle, out RigidBody2D rigidBody, radius:32f
+            //);
+            bodies.Add(circle);
 
         }
 
@@ -116,10 +120,11 @@ public class CollisionTest : WorldEditor
         {
 
             // Create box rigid body
-            CreateRigidBody(
-                Mouse.GetPos(), 0f, scaleBox, 1f, 0.5f, ShapeType.Box, out RigidBody2D rigidBody, width:64f, height:64f
-            );
-            bodies.Add(rigidBody);
+            RigidBody2D box = new RigidBody2D(Mouse.GetPos(), 0, scaleBox, 1f, 0.5f, ShapeType.Box, width:64f, height:64f);
+            //CreateRigidBody(
+            //    Mouse.GetPos(), 0f, scaleBox, 1f, 0.5f, ShapeType.Box, out RigidBody2D rigidBody, width:64f, height:64f
+            //);
+            bodies.Add(box);
 
         } 
 

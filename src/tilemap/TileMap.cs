@@ -44,7 +44,7 @@ public class TileSet
 }
 
 
-public class TileMap : WorldEditor
+public class TileMap : World
 {
     public static void GenerateTileMapTerrain(int[,] grid, int size, List<PhysicsBody2D> bodies)
     {
@@ -120,8 +120,10 @@ public class TileMap : WorldEditor
 
             float width = box.Width * size;
             float height = box.Height * size;
-            WorldEditor.CreateStaticBody(position, 0f, Vector2.One, 0.5f, ShapeType.Box, out StaticBody2D staticBody, width, height);
-            bodies.Add(staticBody);
+            //WorldEditor.CreateStaticBody(position, 0f, Vector2.One, 0.5f, ShapeType.Box, out StaticBody2D staticBody, width, height);
+            
+            StaticBody2D tile = new StaticBody2D(position, 0f, Vector2.One, 0.5f, ShapeType.Box, width:width, height:height);
+            bodies.Add(tile);
         }
     }
 

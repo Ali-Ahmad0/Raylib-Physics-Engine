@@ -8,13 +8,17 @@ public class ProjectileBody2D : RigidBody2D
     private List<PhysicsBody2D> bodies;
 
     // Constructor
-    internal ProjectileBody2D(Vector2 position, float radius, Vector2 velocity, List<PhysicsBody2D> bodies) :
-        this(position, radius, velocity, bodies, 2000) { }
+    internal ProjectileBody2D(Vector2 position, Vector2 scale, 
+        float radius, Vector2 velocity, List<PhysicsBody2D> bodies) :
+        
+        this(position, scale, radius, velocity, bodies, 2000) { }
 
 
     // Constructor with custom destroy time
-    internal ProjectileBody2D(Vector2 position, float radius, Vector2 velocity, List<PhysicsBody2D> bodies, int time) 
-        : base(position, 0, 1, 1, 0.5f, ShapeType.Circle, radius:radius)
+    internal ProjectileBody2D(Vector2 position, Vector2 scale, 
+        float radius, Vector2 velocity, List<PhysicsBody2D> bodies, int time) 
+        
+        : base(position, 0, scale, 1, 0.5f, ShapeType.Circle, radius:radius *= scale.Length())
     {
         // Initialize the projectile
         this.bodies = bodies;

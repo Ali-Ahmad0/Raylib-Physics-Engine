@@ -9,7 +9,7 @@ using System.Numerics;
 
 namespace GameEngine.example.scenes.game;
 
-public class Level2 : WorldEditor
+public class Level2 : World
 {
     private TileMapProps tileMapProps;
     private List<PhysicsBody2D> bodies;

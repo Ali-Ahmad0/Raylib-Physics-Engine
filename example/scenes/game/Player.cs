@@ -36,8 +36,9 @@ public class Player : CharacterBody2D
 
     private List<Animation> Animations;
 
-    public Player(Vector2 position, float rotation, float width, float height) : base(position, rotation, width, height)
+    public Player(Vector2 position, float rotation, float width, float height) : base(position, rotation, Vector2.One, width, height)
     {
+        // This player has gravity
         components.Add(new Gravity(15f));
 
         // Initialize the player
@@ -47,8 +48,9 @@ public class Player : CharacterBody2D
         Animations = new List<Animation>();
 
         // Initialize the player animations
-        CreateAnimations();
+        InitAnimations();
 
+        // Assign input keys for player movement
         Input.AssignKey("jump", KeyboardKey.Space);
         Input.AssignKey("crouch", KeyboardKey.LeftControl);
         Input.AssignKey("attack", KeyboardKey.Z);
@@ -74,6 +76,7 @@ public class Player : CharacterBody2D
 
     private void MovePlayer(double delta)
     {
+        // Input direction
         float keyboardDirection = 0f;
         float gamepadDirection = 0f;
 
@@ -89,6 +92,7 @@ public class Player : CharacterBody2D
         // Use gamepad direction only if keyboard direction is not providing input
         float direction = keyboardDirection != 0f ? keyboardDirection : gamepadDirection;
 
+        // Move player
         if (direction != 0)
         {
             LinVelocity.X += acceleration * direction * (float)delta;
@@ -97,6 +101,7 @@ public class Player : CharacterBody2D
             flipH = direction < 0;
         }
 
+        // Stop player
         else
         {
             LinVelocity.X = IsOnFloor ? MathExtra.MoveToward(LinVelocity.X, 0, landDeceleration * (float)delta)
@@ -109,15 +114,17 @@ public class Player : CharacterBody2D
 
     }
 
-    // Crouching
+    // Self explanatory
     private void Crouch()
     {
+        // Crouching logic
         if ((Input.IsKeyDown("crouch") || Gamepad.IsButtonDown("crouch")) && IsOnFloor)
         {
             maxSpeed = 10;
             State = LinVelocity.X == 0 ? PlayerStates.CROUCH_IDLE : PlayerStates.CROUCH_WALK;
         }
 
+        // Back to walking
         else
         {
             maxSpeed = 20;
@@ -167,17 +174,20 @@ public class Player : CharacterBody2D
 
     }
 
+    // Plays the attack animation (simply for testing purposes)
     private void Attack()
     {
         if (IsOnFloor && !(State == PlayerStates.ATTACK || State == PlayerStates.CROUCH_ATTACK))
         {
             if (Input.IsKeyPressed("attack") || Gamepad.IsButtonPressed("attack"))
             {
-                LinVelocity.X = 0;
+                LinVelocity.X = 0; // Stop player
 
+                // Crouching attack
                 if (State is PlayerStates.CROUCH_IDLE || State is PlayerStates.CROUCH_WALK)
                     State = PlayerStates.CROUCH_ATTACK;
 
+                // Multiple attacks (when standing)
                 else
                 {
                     attackCounter = (attackCounter + 1) % 2;
@@ -187,11 +197,13 @@ public class Player : CharacterBody2D
         }
     }
 
+    // Renders player and plays animaions
     private void DrawPlayer()
     {
         // Draw the player based on the current state
         Animation currAnimation = Animations[0];
 
+        // Animation state machine
         switch (State)
         {
             case PlayerStates.IDLE:
@@ -254,6 +266,7 @@ public class Player : CharacterBody2D
     private static double animationStartTime;
     private PlayerStates prevState = PlayerStates.IDLE;
 
+    // Get current animation frame
     private int GetUpdatedFrame(Animation animation)
     {
         return (int)((Raylib.GetTime() - animationStartTime) * animation.FramesPerSecond) % animation.TotalFrames;
@@ -287,9 +300,11 @@ public class Player : CharacterBody2D
             origin.X = CollisionShape.Dimensions.Height - origin.X; // Adjusting the origin when flipped horizontally
         }
 
+        // Draw sprite
         Raylib.DrawTexturePro(animation.Atlas, source, dest, origin, 0, Color.White);
     }
 
+    // Check if the animation is completed
     private bool Completed(Animation animation)
     {
         if (GetUpdatedFrame(animation) >= animation.TotalFrames - 1)
@@ -298,7 +313,8 @@ public class Player : CharacterBody2D
         return false;
     }
 
-    private void CreateAnimations()
+    // Create all animations for the player
+    private void InitAnimations()
     {
         // Construct the relative path from the executable's directory to the assets folder
         string relativePath = "../../../example/assets/player";
@@ -319,6 +335,7 @@ public class Player : CharacterBody2D
         AddAnimation(path + "_CrouchAttack.png", 10, 4, new Rectangle(0, 40, 120, 40));
     }
 
+    // Method to create a single animation
     private void AddAnimation(string path, int framesPerSecond, int numberOfSprite, Rectangle spriteSize)
     {
         // Create a list of rectangles to store the sprite sheet
@@ -333,6 +350,7 @@ public class Player : CharacterBody2D
     }
 }
 
+// Animation struct
 internal struct Animation
 {
     internal Texture2D Atlas { get; private set; }

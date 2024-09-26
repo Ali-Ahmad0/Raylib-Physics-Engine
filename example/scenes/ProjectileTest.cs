@@ -7,7 +7,7 @@ using System.Numerics;
 
 namespace Game.res.scenes;
 
-public class ProjectileTest : WorldEditor
+public class ProjectileTest : World
 {
     private List<PhysicsBody2D> bodies;
     private List<Color> colors;
@@ -67,8 +67,9 @@ public class ProjectileTest : WorldEditor
             velocity /= 128;
 
             // Create projectile
-            CreateProjectileBody(spawnPosition, Vector2.One, 1f, 0.5f, 16f, velocity * 0.2f, bodies, out RigidBody2D body);
-            bodies.Add(body);
+            //CreateProjectileBody(spawnPosition, Vector2.One, 1f, 0.5f, 16f, velocity * 0.2f, bodies, out RigidBody2D body);
+            ProjectileBody2D projectile = new ProjectileBody2D(spawnPosition, Vector2.One, 16f, velocity * 0.2f, bodies);
+            bodies.Add(projectile);
 
         }
 

@@ -10,7 +10,7 @@ using GameEngine.src.helper;
 
 namespace GameEngine.example.scenes.game
 {
-    public class MainMenu : WorldEditor
+    public class MainMenu : World
     {
         string title;
         TextureButton start;
