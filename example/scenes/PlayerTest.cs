@@ -39,6 +39,8 @@ internal class PlayerTest : World
         };
 
         TileMap.GenerateTileMap(ref tileMapProps, bodies);
+        TileMap.CreateTilemapTexture(ref tileMapProps);
+
         Raylib.ShowCursor();
 
         // Create a camera centered at the middle of the screen
@@ -65,7 +67,8 @@ internal class PlayerTest : World
     {
         // Scene title
         Raylib.DrawText("Player Test", 20, 20, 32, Color.Green);
-        TileMap.DrawBackground(tileMapProps);
+        //TileMap.DrawBackground(tileMapProps);
+        TileMap.DrawTilemapTexture(ref tileMapProps);
     }
 
 }

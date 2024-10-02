@@ -13,6 +13,9 @@ public struct TileMapProps
 {
     public int[,] collisionMap; // 2D array representing the collision map
     public int[,] textureMap; // 2D array representing the texture map
+    
+    public Texture2D texture; // The texture of the tilemap
+
     public TileSet tileSet; // TileSet object containing information about the tileset
     public int size; // Size of the tiles
 }
@@ -127,28 +130,73 @@ public class TileMap : World
         }
     }
 
-    // Draw the background using the tileset and texture map
-    public static void DrawBackground(TileSet tileSet, int[,] textureMap, int size)
+    //// Draw the background using the tileset and texture map
+    //public static void DrawBackground(TileSet tileSet, int[,] textureMap, int size)
+    //{
+    //    for (int i = 0; i < textureMap.GetLength(0); i++)
+    //    {
+    //        for (int j = 0; j < textureMap.GetLength(1); j++)
+    //        {
+    //            if (textureMap[i, j] >= 0)
+    //            {
+    //                // Iterate through the texture map and draw the tiles
+    //                Rectangle source = new Rectangle((textureMap[i, j] % tileSet.columns * tileSet.rect.Width) + tileSet.rect.X, (textureMap[i, j] / tileSet.columns % tileSet.rows * tileSet.rect.Height) + tileSet.rect.Y, tileSet.rect.Width, tileSet.rect.Height);
+    //                Rectangle dest = new Rectangle(j * size, i * size, size, size);
+    //                Raylib.DrawTexturePro(tileSet.texture, source, dest, new Vector2(0, 0), 0, Color.White);
+    //            }
+    //        }
+    //    }
+    //}
+
+    //// Draw the background using the tilemap properties
+    //public static void DrawBackground(TileMapProps tileMapProps)
+    //{
+    //    DrawBackground(tileMapProps.tileSet, tileMapProps.textureMap, tileMapProps.size);
+    //}
+
+    public static void CreateTilemapTexture(ref TileMapProps tileMapProps)
     {
-        for (int i = 0; i < textureMap.GetLength(0); i++)
+        // Create a RenderTexture2D with the appropriate width and height based on the tilemap size
+        int width = tileMapProps.textureMap.GetLength(1) * tileMapProps.size;
+        int height = tileMapProps.textureMap.GetLength(0) * tileMapProps.size;
+        RenderTexture2D renderTexture = Raylib.LoadRenderTexture(width, height);
+
+        // Start drawing to the render texture
+        Raylib.BeginTextureMode(renderTexture);
+        Raylib.ClearBackground(Color.Blank); // Optional: Clear with transparent background
+
+        for (int i = 0; i < tileMapProps.textureMap.GetLength(0); i++)
         {
-            for (int j = 0; j < textureMap.GetLength(1); j++)
+            for (int j = 0; j < tileMapProps.textureMap.GetLength(1); j++)
             {
-                if (textureMap[i, j] >= 0)
+                if (tileMapProps.textureMap[i, j] >= 0)
                 {
-                    // Iterate through the texture map and draw the tiles
-                    Rectangle source = new Rectangle((textureMap[i, j] % tileSet.columns * tileSet.rect.Width) + tileSet.rect.X, (textureMap[i, j] / tileSet.columns % tileSet.rows * tileSet.rect.Height) + tileSet.rect.Y, tileSet.rect.Width, tileSet.rect.Height);
-                    Rectangle dest = new Rectangle(j * size, i * size, size, size);
-                    Raylib.DrawTexturePro(tileSet.texture, source, dest, new Vector2(0, 0), 0, Color.White);
+                    // Calculate source and destination rectangles for drawing the tile
+                    Rectangle source = new Rectangle(
+                        (tileMapProps.textureMap[i, j] % tileMapProps.tileSet.columns * tileMapProps.tileSet.rect.Width) + tileMapProps.tileSet.rect.X,
+                        (tileMapProps.textureMap[i, j] / tileMapProps.tileSet.columns % tileMapProps.tileSet.rows * tileMapProps.tileSet.rect.Height) + tileMapProps.tileSet.rect.Y,
+                        tileMapProps.tileSet.rect.Width, -tileMapProps.tileSet.rect.Height
+                    );
+
+                    // Invert the Y coordinate when calculating the destination rectangle
+                    Rectangle dest = new Rectangle(j * tileMapProps.size, height - (i + 1) * tileMapProps.size, tileMapProps.size, tileMapProps.size);
+
+                    // Draw the tile onto the render texture
+                    Raylib.DrawTexturePro(tileMapProps.tileSet.texture, source, dest, new Vector2(0, 0), 0, Color.White);
                 }
             }
         }
+
+        Raylib.EndTextureMode(); // Stop drawing to the render texture
+
+        // Return the rendered texture as a Texture2D
+        tileMapProps.texture = renderTexture.Texture;
     }
 
-    // Draw the background using the tilemap properties
-    public static void DrawBackground(TileMapProps tileMapProps)
+    public static void DrawTilemapTexture(ref TileMapProps tileMapProps)
     {
-        DrawBackground(tileMapProps.tileSet, tileMapProps.textureMap, tileMapProps.size);
+        // Draw the pre-rendered tilemap texture at the specified position
+        Raylib.DrawTexture(tileMapProps.texture, 0, 0, Color.White);
     }
 
     // Generate the tilemap terrain
@@ -180,12 +228,12 @@ public class TileMap : World
                     int[,] tilemap = new int[height, width];
 
                     // Convert tilemap data into 2d integer array
-                    for (int i = 0; i < height; i++)
+                    for (int i = 0; i < data.GetArrayLength(); i++)
                     {
-                        for (int j = 0; j < width; j++)
-                        {
-                            tilemap[i, j] = data[i * width + j].GetInt32() - 1;
-                        }
+                        int row = i / width;
+                        int col = i % width;
+
+                        tilemap[row, col] = data[i].GetInt32() - 1;
                     }
                     return tilemap;
                 }

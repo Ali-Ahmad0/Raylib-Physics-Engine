@@ -39,6 +39,8 @@ public class Level2 : World
         };
 
         TileMap.GenerateTileMap(ref tileMapProps, bodies);
+        TileMap.CreateTilemapTexture(ref tileMapProps);
+
         Raylib.ShowCursor();
 
         // Create a camera centered at the middle of the screen
@@ -83,6 +85,6 @@ public class Level2 : World
 
     private void Draw()
     {
-        TileMap.DrawBackground(tileMapProps);
+        TileMap.DrawTilemapTexture(ref tileMapProps);
     }
 }

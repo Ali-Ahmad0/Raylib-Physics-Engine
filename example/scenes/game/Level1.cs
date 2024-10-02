@@ -1,8 +1,6 @@
 ﻿using Game.res.scenes;
-using GameEngine.src;
 using GameEngine.src.main;
 using GameEngine.src.physics.body;
-using GameEngine.src.physics.component;
 using GameEngine.src.tilemap;
 using GameEngine.src.world;
 using Raylib_cs;
@@ -40,6 +38,8 @@ namespace GameEngine.example.scenes.game
             };
 
             TileMap.GenerateTileMap(ref tileMapProps, bodies);
+            TileMap.CreateTilemapTexture(ref tileMapProps);
+
             Raylib.ShowCursor();
 
             // Create a camera centered at the middle of the screen
@@ -83,7 +83,7 @@ namespace GameEngine.example.scenes.game
 
         private void Draw()
         {
-            TileMap.DrawBackground(tileMapProps);
+            TileMap.DrawTilemapTexture(ref tileMapProps);
         }
 
     }
