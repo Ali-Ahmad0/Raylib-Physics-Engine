@@ -123,7 +123,6 @@ public class TileMap : World
 
             float width = box.Width * size;
             float height = box.Height * size;
-            //WorldEditor.CreateStaticBody(position, 0f, Vector2.One, 0.5f, ShapeType.Box, out StaticBody2D staticBody, width, height);
             
             StaticBody2D tile = new StaticBody2D(position, 0f, Vector2.One, 0.5f, ShapeType.Box, width:width, height:height);
             bodies.Add(tile);
