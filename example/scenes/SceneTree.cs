@@ -23,6 +23,7 @@ namespace Game.res.scenes
             Input.AssignKey("three", KeyboardKey.Three);
             Input.AssignKey("four", KeyboardKey.Four);
             Input.AssignKey("five", KeyboardKey.Five);
+            Input.AssignKey("enter", KeyboardKey.Enter);
 
             Gamepad.AssignButton("l2", GamepadButton.LeftTrigger2);
             Gamepad.AssignButton("r2", GamepadButton.RightTrigger2);

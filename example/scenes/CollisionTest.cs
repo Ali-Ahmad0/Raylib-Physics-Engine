@@ -122,87 +122,10 @@ public class CollisionTest : World
         // Update and draw each body
         for (int i = 0; i < bodies.Count; i++) 
         {
-            if (bodies[i] is RigidBody2D)
-            {
-                DrawCollisionShapes(bodies[i].CollisionShape, 
-                    linVelocityToColor(bodies[i].LinVelocity.Length()));
-            }
-            else
-            {
-                DrawCollisionShapes(bodies[i].CollisionShape, colors[i % 5]);
-            }   
+            DrawCollisionShapes(bodies[i].CollisionShape, colors[i % 5]);
         }
 
         // Cursor icon
         Raylib.DrawText("< >", (int)cursorPos.X, (int)cursorPos.Y, 32, Color.Green);
-    }
-
-    private float linVelocityToHue(float linVelocity)
-    {
-        float maxLinVelocity = 0.75f;
-        linVelocity = Math.Clamp(linVelocity, 0f, maxLinVelocity);
-        float linToMaxRatio = linVelocity / maxLinVelocity;
-
-        float hue = 200.0f - (200.0f * linToMaxRatio);
-        return hue;
-    }
-
-    private Color linVelocityToColor(float linVelocity) 
-    {
-        float h = linVelocityToHue(linVelocity);
-        float s = 0.9f;
-        float v = 0.9f;
-
-        // Convert HSV to RGB
-        float c = v * s; // Chroma
-        float x = c * (1 - Math.Abs((h / 60) % 2 - 1));
-        float m = v - c;
-
-        float rPrime, gPrime, bPrime;
-
-        if (h < 60)
-        {
-            rPrime = c;
-            gPrime = x;
-            bPrime = 0;
-        }
-        else if (h < 120)
-        {
-            rPrime = x;
-            gPrime = c;
-            bPrime = 0;
-        }
-        else if (h < 180)
-        {
-            rPrime = 0;
-            gPrime = c;
-            bPrime = x;
-        }
-        else if (h < 240)
-        {
-            rPrime = 0;
-            gPrime = x;
-            bPrime = c;
-        }
-        else if (h < 300)
-        {
-            rPrime = x;
-            gPrime = 0;
-            bPrime = c;
-        }
-        else
-        {
-            rPrime = c;
-            gPrime = 0;
-            bPrime = x;
-        }
-
-        // Convert to RGB scale (0-255)
-        int r = (int)((rPrime + m) * 255);
-        int g = (int)((gPrime + m) * 255);
-        int b = (int)((bPrime + m) * 255);
-
-        Color color = new Color(r, g, b, 255);
-        return color;
     }
 }

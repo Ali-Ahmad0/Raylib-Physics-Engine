@@ -41,9 +41,33 @@ internal struct Physics
         CollisionNarrowPhase(bodies, bounds);
     }
 
+    private static void SortBodies(List<PhysicsBody2D> bodies)
+    {
+        // Insertion sort on bodies based on X
+        for (int i = 1; i < bodies.Count; i++)
+        {
+            var k = bodies[i];
+            float kX = k.CollisionShape.GetAABB().Min.X;
+
+            int j = i - 1;
+
+            while (j >= 0 && bodies[j].CollisionShape.GetAABB().Min.X > kX)
+            {
+                bodies[j + 1] = bodies[j];
+                j--;
+            }
+
+            // Place current at the correct position
+            bodies[j + 1] = k;
+        }
+    }
+
+
     // Check if 2 bodies may or may not be colliding
     private static void CollisionBroadPhase(List<PhysicsBody2D> bodies, CameraBounds bounds)
     {
+        // Sort from left to right
+        SortBodies(bodies);
 
         for (int i = 0; i < bodies.Count; i++)
         {
@@ -58,6 +82,11 @@ internal struct Physics
                     CollisionHelper.AABBExceedsBounds(bodyB.CollisionShape.GetAABB(), bounds))
                 {
                     continue;
+                }
+
+                if (bodyB.CollisionShape.GetAABB().Min.X > bodyA.CollisionShape.GetAABB().Max.X) 
+                {
+                    break;
                 }
 
                 if (CollisionDetection.AABBIntersection(bodyA.CollisionShape.GetAABB(), bodyB.CollisionShape.GetAABB()))
