@@ -165,12 +165,12 @@ internal struct CollisionDetection
 
             float axisDepth = MathF.Min(maxB - minA, maxA - minB);
             
-            if (axisDepth < depth) {
+            if (axisDepth < depth) 
+            {
                 depth = axisDepth;
                 normal = axis;
             }
         }
-
         
         // Polygon 2
         for (int i = 0; i < verticesB.Length; i++)
@@ -182,11 +182,11 @@ internal struct CollisionDetection
             // Get the edge and it's perpendicular axis
             Vector2 edge = vertexB - vertexA;
             Vector2 axis = new Vector2(-edge.Y, edge.X);
+            axis = Vector2.Normalize(axis);
 
             // Project vertices to the normal axis
             CollisionHelper.ProjectVertices(verticesA, axis, out float minA, out float maxA);
             CollisionHelper.ProjectVertices(verticesB, axis, out float minB, out float maxB);
-            axis = Vector2.Normalize(axis);
 
             // No collision
             if (minA >= maxB || minB >= maxA)  
