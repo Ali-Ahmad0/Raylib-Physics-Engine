@@ -235,8 +235,8 @@ internal struct CollisionDetection
         normal = Vector2.Normalize(centerB - centerA);
         depth = totalRadii - distance;
 
-        // Return true if collision occured
-        return distance < totalRadii ? true : false;
+        // Return if collision occured
+        return distance < totalRadii;
     }
 
     // Check if any collision occurred
